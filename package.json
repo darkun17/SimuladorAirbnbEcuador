@@ -1,0 +1,10 @@
+{
+  "name": "simulador-airbnb-ecuador",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Simulador financiero y motor de pricing dinamico para rentas cortas en Ecuador",
+  "scripts": {
+    "test": "node --test js/"
+  }
+}
