@@ -5,6 +5,6 @@
   "type": "module",
   "description": "Simulador financiero y motor de pricing dinamico para rentas cortas en Ecuador",
   "scripts": {
-    "test": "node --test js/"
+    "test": "node --test js/*.test.js"
   }
 }
