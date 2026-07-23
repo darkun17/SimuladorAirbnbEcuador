@@ -131,7 +131,11 @@ window.Sim = window.Sim || {};
     root.querySelector('#kpi-noches-minimas').textContent =
       results.nochesMinimasRentables === Infinity ? 'No alcanzable con esta tarifa' : `${results.nochesMinimasRentables} noches`;
 
-    root.querySelector('#kpi-noches-ocupadas').textContent = `${state.simulacion.nochesOcupadasMes} noches`;
+    const badgeCiudad = root.querySelector('#badge-ciudad');
+    if (badgeCiudad) badgeCiudad.textContent = `Calculadas para ${state.estacionalidad.ciudad}`;
+    const badgeNoches = root.querySelector('#badge-noches');
+    if (badgeNoches) badgeNoches.textContent = `Con ${state.simulacion.nochesOcupadasMes} noches ocupadas`;
+
     root.querySelector('#kpi-ingreso-bruto').textContent = fmt.format(results.proyeccion.ingresoBrutoRecaudado);
     root.querySelector('#kpi-comision').textContent = fmt.format(results.proyeccion.comisionTotal);
     root.querySelector('#kpi-deposito-airbnb').textContent = fmt.format(results.proyeccion.gananciaAirbnbTotal);
@@ -143,10 +147,34 @@ window.Sim = window.Sim || {};
       results.puntoEquilibrio === Infinity ? 'No alcanzable con esta tarifa' : `${results.puntoEquilibrio} noches/mes`;
 
     renderDoughnutChart(root.querySelector('#chart-doughnut'), results.proyeccion);
-    renderBarChart(root.querySelector('#chart-bar'), results.curvaUtilidad);
+    renderBarChart(root.querySelector('#chart-bar'), results.curvaUtilidad, results.puntoEquilibrio);
+    renderDoughnutLegend(root, results.proyeccion);
     renderFormulas(root, state, results);
 
     return results;
+  }
+
+  function renderDoughnutLegend(root, proyeccion) {
+    const legend = root.querySelector('#doughnut-legend');
+    const totalEl = root.querySelector('#doughnut-total');
+    if (!legend || !totalEl) return;
+    const total = proyeccion.ingresoBrutoRecaudado;
+    const items = [
+      { label: 'Comisión Airbnb', value: proyeccion.comisionTotal, color: '#EF4444' },
+      { label: 'IVA', value: proyeccion.ivaTotal, color: '#F97316' },
+      { label: 'Gastos Operativos', value: proyeccion.gastosOperativosTotales, color: '#64748B' },
+      { label: 'Utilidad Neta', value: Math.max(proyeccion.utilidadNeta, 0), color: '#10B981' },
+    ];
+    legend.innerHTML = items
+      .map((item) => {
+        const pct = total > 0 ? (item.value / total) * 100 : 0;
+        return `<li class="flex items-center justify-between gap-2">
+          <span class="flex items-center gap-1.5 min-w-0 text-slate-700"><span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${item.color}"></span><span class="truncate">${item.label}</span></span>
+          <span class="text-slate-500 text-xs shrink-0">${fmt.format(item.value)} · ${pct.toFixed(1)}%</span>
+        </li>`;
+      })
+      .join('');
+    totalEl.textContent = fmt.format(total);
   }
 
   function renderFormulas(root, state, results) {
@@ -243,7 +271,7 @@ window.Sim = window.Sim || {};
   }
 
   function renderFeriados(root, feriados, onChange) {
-    const tbody = root.querySelector('#tabla-feriados tbody');
+    const tbody = document.querySelector('#tabla-feriados tbody');
     tbody.innerHTML = '';
     feriados.forEach((f, index) => {
       const tr = document.createElement('tr');
@@ -272,7 +300,7 @@ window.Sim = window.Sim || {};
       });
     });
 
-    root.querySelector('#btn-agregar-feriado').onclick = () => {
+    document.querySelector('#btn-agregar-feriado').onclick = () => {
       onChange([...feriados, crearFeriadoLocal('Nueva fiesta local', new Date().toISOString().slice(0, 10))]);
     };
   }
@@ -339,21 +367,47 @@ window.Sim = window.Sim || {};
     if (slider && document.activeElement !== slider) slider.value = state.simulacion.nochesOcupadasMes;
   }
 
-  function bindStepNavigation(root) {
-    const steps = Array.from(root.querySelectorAll('[data-step]'));
-    const tabs = Array.from(root.querySelectorAll('[data-step-tab]'));
-    function showStep(name) {
-      steps.forEach((s) => s.classList.toggle('hidden', s.dataset.step !== name));
-      tabs.forEach((t) => {
-        const active = t.dataset.stepTab === name;
-        t.classList.toggle('bg-emerald-500', active);
-        t.classList.toggle('text-white', active);
-        t.classList.toggle('bg-white', !active);
+  function bindAccordions(root) {
+    root.querySelectorAll('[data-accordion-toggle]').forEach((btn) => {
+      const key = btn.dataset.accordionToggle;
+      const panel = root.querySelector(`[data-accordion-panel="${key}"]`);
+      const chevron = root.querySelector(`[data-accordion-chevron="${key}"]`);
+      if (!panel) return;
+      btn.addEventListener('click', () => {
+        const isHidden = panel.classList.toggle('hidden');
+        if (chevron) chevron.style.transform = isHidden ? 'rotate(-90deg)' : 'rotate(0deg)';
+      });
+    });
+
+    const masCostosBtn = root.querySelector('[data-toggle-mas-costos]');
+    const masCostosPanel = root.querySelector('[data-mas-costos]');
+    if (masCostosBtn && masCostosPanel) {
+      masCostosBtn.addEventListener('click', () => {
+        const isHidden = masCostosPanel.classList.toggle('hidden');
+        masCostosBtn.textContent = isHidden ? 'Ver más costos ▾' : 'Ver menos costos ▴';
       });
     }
-    tabs.forEach((t) => t.addEventListener('click', () => showStep(t.dataset.stepTab)));
-    showStep(tabs[0]?.dataset.stepTab);
   }
 
-  window.Sim.ui = { renderDashboard, renderFeriados, bindStepForm, syncStepForm, bindStepNavigation, bindFormulasToggle };
+  function bindFeriadosModal(root) {
+    const modal = document.getElementById('modal-feriados');
+    if (!modal) return;
+    const openBtns = [root.querySelector('#btn-abrir-feriados'), root.querySelector('#btn-administrar-temporadas')];
+    openBtns.forEach((btn) => btn && btn.addEventListener('click', () => modal.classList.remove('hidden')));
+    const closeBtn = document.getElementById('btn-cerrar-feriados');
+    if (closeBtn) closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) modal.classList.add('hidden');
+    });
+  }
+
+  window.Sim.ui = {
+    renderDashboard,
+    renderFeriados,
+    bindStepForm,
+    syncStepForm,
+    bindAccordions,
+    bindFeriadosModal,
+    bindFormulasToggle,
+  };
 })();

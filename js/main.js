@@ -1,7 +1,15 @@
 // js/main.js
 (function () {
   const { createDefaultState, mergeState } = window.Sim.state;
-  const { bindStepForm, syncStepForm, bindStepNavigation, renderDashboard, renderFeriados, bindFormulasToggle } = window.Sim.ui;
+  const {
+    bindStepForm,
+    syncStepForm,
+    bindAccordions,
+    bindFeriadosModal,
+    renderDashboard,
+    renderFeriados,
+    bindFormulasToggle,
+  } = window.Sim.ui;
   const {
     isFileSystemAccessSupported,
     createNewFile,
@@ -29,6 +37,14 @@
     el.classList.remove('hidden');
   }
 
+  function showToast(message) {
+    const el = document.getElementById('toast-guardado');
+    el.textContent = message;
+    el.classList.remove('hidden');
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => el.classList.add('hidden'), 2000);
+  }
+
   function bindManualModal() {
     const modal = document.getElementById('modal-manual');
     document.getElementById('btn-manual').addEventListener('click', () => modal.classList.remove('hidden'));
@@ -38,14 +54,30 @@
     });
   }
 
+  function bindHeaderActions() {
+    document.getElementById('btn-guardar').addEventListener('click', async () => {
+      clearTimeout(saveTimer);
+      try {
+        await saveState(state);
+        showToast('Guardado ✓');
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+    document.getElementById('btn-exportar-pdf').addEventListener('click', () => window.print());
+  }
+
   function showApp() {
     document.getElementById('intro-info').classList.add('hidden');
     document.getElementById('btn-manual').classList.remove('hidden');
+    document.getElementById('btn-guardar').classList.remove('hidden');
+    document.getElementById('btn-exportar-pdf').classList.remove('hidden');
     document.getElementById('welcome-screen').classList.add('hidden');
     document.getElementById('resume-screen').classList.add('hidden');
     document.getElementById('app-screen').classList.remove('hidden');
     const root = document.getElementById('app-screen');
-    bindStepNavigation(root);
+    bindAccordions(root);
+    bindFeriadosModal(root);
     bindFormulasToggle(root);
 
     function onStateChange(patch) {
@@ -92,6 +124,7 @@
 
   async function init() {
     bindManualModal();
+    bindHeaderActions();
 
     if (!isFileSystemAccessSupported()) {
       document.getElementById('unsupported-screen').classList.remove('hidden');

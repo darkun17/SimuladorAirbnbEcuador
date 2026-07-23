@@ -10,20 +10,23 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
-  <header class="bg-slate-900 text-white px-4 sm:px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
+  <header class="print:hidden bg-slate-900 text-white px-4 sm:px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 shrink-0 rounded-lg bg-emerald-500 flex items-center justify-center text-lg">🏠</div>
       <h1 class="text-base sm:text-xl font-semibold">Simulador Financiero — Airbnb Ecuador</h1>
     </div>
-    <div class="flex items-center gap-4">
-      <p class="hidden lg:block text-xs text-slate-400">Descubre cuánto podrías ganar con tu propiedad</p>
+    <div class="flex items-center flex-wrap justify-end gap-2 sm:gap-3">
+      <p class="hidden xl:block text-xs text-slate-400 mr-2">Descubre cuánto podrías ganar con tu propiedad</p>
       <button id="btn-manual" class="hidden bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg px-3 py-2 font-medium whitespace-nowrap">📖 Manual de uso</button>
+      <button id="btn-guardar" class="hidden bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg px-3 py-2 font-medium whitespace-nowrap">💾 Guardar</button>
+      <button id="btn-exportar-pdf" class="hidden bg-red-500 hover:bg-red-600 text-white text-sm rounded-lg px-3 py-2 font-medium whitespace-nowrap">📄 Exportar PDF</button>
     </div>
   </header>
+  <div id="toast-guardado" class="hidden print:hidden fixed top-4 right-4 z-50 bg-slate-900 text-white text-sm rounded-lg px-4 py-2 shadow-lg">Guardado ✓</div>
 
-  <div id="error-banner" class="hidden bg-red-500 text-white px-6 py-3"></div>
+  <div id="error-banner" class="hidden print:hidden bg-red-500 text-white px-6 py-3"></div>
 
-  <div id="modal-manual" class="hidden fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50">
+  <div id="modal-manual" class="hidden print:hidden fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-4 relative">
       <button id="btn-cerrar-manual" class="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-xl leading-none">×</button>
       <div>
@@ -57,7 +60,7 @@
   </div>
 
   <main class="max-w-6xl mx-auto p-6">
-    <section id="intro-info" class="bg-white border border-slate-200 rounded-xl overflow-hidden mb-6">
+    <section id="intro-info" class="print:hidden bg-white border border-slate-200 rounded-xl overflow-hidden mb-6">
       <div class="grid lg:grid-cols-2">
         <div class="relative pb-10 sm:pb-12">
           <div class="bg-gradient-to-br from-emerald-500 to-slate-900 min-h-[180px] sm:min-h-[220px] flex items-center justify-center overflow-hidden">
@@ -193,167 +196,211 @@
       </div>
     </section>
 
-    <section id="app-screen" class="hidden space-y-6">
-      <nav class="flex flex-wrap gap-2">
-        <button data-step-tab="costos" class="rounded-xl px-4 py-2 font-medium bg-white border border-slate-200">1. Costos</button>
-        <button data-step-tab="configuracion" class="rounded-xl px-4 py-2 font-medium bg-white border border-slate-200">2. Configuración</button>
-        <button data-step-tab="estacionalidad" class="rounded-xl px-4 py-2 font-medium bg-white border border-slate-200">3. Estacionalidad</button>
-      </nav>
+    <section id="app-screen" class="hidden">
+      <div class="grid lg:grid-cols-[340px_1fr] gap-6 items-start">
+        <aside class="print:hidden space-y-4 lg:sticky lg:top-6">
+          <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+            <button type="button" data-accordion-toggle="acc-costos" class="w-full flex items-center gap-3 p-4 text-left">
+              <div class="w-9 h-9 shrink-0 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-base">💲</div>
+              <span class="font-semibold flex-1">1. Costos</span>
+              <span data-accordion-chevron="acc-costos" class="text-slate-400 transition-transform">▾</span>
+            </button>
+            <div data-accordion-panel="acc-costos" class="px-4 pb-4 space-y-2">
+              <label class="block text-sm text-slate-500">Alícuota / Condominio</label>
+              <input data-field="costosFijos.alicuota" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Internet / Fibra</label>
+              <input data-field="costosFijos.internet" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Seguro del inmueble</label>
+              <input data-field="costosFijos.seguro" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Agua (básico fijo)</label>
+              <input data-field="costosFijos.agua" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Luz / Energía eléctrica</label>
+              <input data-field="costosFijos.luz" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Otros fijos</label>
+              <input data-field="costosFijos.otros" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
 
-      <div data-step="costos" class="grid md:grid-cols-3 gap-4">
-        <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2">
-          <h2 class="font-semibold">Costos Fijos Mensuales ($)</h2>
-          <label class="block text-sm text-slate-500">Alícuota / Condominio</label>
-          <input data-field="costosFijos.alicuota" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Internet / Fibra</label>
-          <input data-field="costosFijos.internet" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Seguro del inmueble</label>
-          <input data-field="costosFijos.seguro" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Agua (básico fijo)</label>
-          <input data-field="costosFijos.agua" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Luz / Energía eléctrica</label>
-          <input data-field="costosFijos.luz" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Otros fijos</label>
-          <input data-field="costosFijos.otros" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-        </div>
-
-        <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2">
-          <h2 class="font-semibold">Costos Directos por Estadía ($)</h2>
-          <label class="block text-sm text-slate-500">Lavado de sábanas y toallas</label>
-          <input data-field="costosDirectos.lavanderia" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Limpieza / Insumos de limpieza</label>
-          <input data-field="costosDirectos.limpieza" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Amenities de baño</label>
-          <input data-field="costosDirectos.amenities" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Suministros de cocina</label>
-          <input data-field="costosDirectos.suministrosCocina" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-        </div>
-
-        <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2">
-          <h2 class="font-semibold">Cortesías por Huésped ($)</h2>
-          <label class="block text-sm text-slate-500">Costo unitario de agua embotellada</label>
-          <input data-field="cortesias.aguaCostoUnitario" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Botellas de agua por reserva</label>
-          <input data-field="cortesias.aguaCantidad" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Snacks / frutas de bienvenida (por reserva)</label>
-          <input data-field="cortesias.snacksCostoPorReserva" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-        </div>
-      </div>
-
-      <div data-step="configuracion" class="hidden grid md:grid-cols-2 gap-4">
-        <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2">
-          <h2 class="font-semibold">Capacidad del Departamento</h2>
-          <label class="block text-sm text-slate-500">Habitaciones</label>
-          <input data-field="configuracion.habitaciones" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Baños</label>
-          <input data-field="configuracion.banos" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Capacidad base (huéspedes incluidos)</label>
-          <input data-field="configuracion.capacidadBase" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Capacidad máxima</label>
-          <input data-field="configuracion.capacidadMaxima" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-        </div>
-        <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2">
-          <h2 class="font-semibold">Persona Adicional</h2>
-          <label class="block text-sm text-slate-500">Costo adicional por huésped extra ($/noche)</label>
-          <input data-field="configuracion.costoHuespedExtra" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">% recomendado para persona adicional</label>
-          <input data-field="configuracion.porcentajePersonaAdicional" type="number" min="0" max="100" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Huéspedes reales en la simulación</label>
-          <input data-field="simulacion.huespedesReales" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-        </div>
-        <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2 md:col-span-2">
-          <h2 class="font-semibold">Objetivo de Rentabilidad</h2>
-          <label class="block text-sm text-slate-500">Utilidad neta deseada por noche ($)</label>
-          <input data-field="simulacion.utilidadDeseadaPorNoche" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-          <label class="block text-sm text-slate-500">Promedio de noches por reserva</label>
-          <input data-field="simulacion.promedioNochesPorReserva" type="number" min="1" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-        </div>
-      </div>
-
-      <div data-step="estacionalidad" class="hidden grid md:grid-cols-2 gap-4">
-        <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2">
-          <h2 class="font-semibold">Ciudad y Temporada Alta</h2>
-          <label class="block text-sm text-slate-500">Ciudad</label>
-          <select data-field="estacionalidad.ciudad" class="w-full rounded-lg border-slate-200 border px-2 py-1">
-          </select>
-          <p class="text-xs text-slate-500">Las 24 provincias y sus cantones — los precios de temporada suelen variar por sector.</p>
-          <label class="block text-sm text-slate-500">Factor de incremento temporada alta (%)</label>
-          <input data-field="estacionalidad.factorIncrementoTemporadaAlta" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
-        </div>
-        <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2 min-w-0">
-          <h2 class="font-semibold">Feriados y Fiestas Locales</h2>
-          <div class="overflow-x-auto">
-          <table id="tabla-feriados" class="w-full text-sm min-w-[560px]">
-            <thead>
-              <tr class="text-slate-500 text-left">
-                <th class="px-3 py-2">Nombre</th>
-                <th class="px-3 py-2">Fecha</th>
-                <th class="px-3 py-2">Tipo</th>
-                <th class="px-3 py-2"></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+              <button type="button" data-toggle-mas-costos class="text-emerald-500 text-sm font-medium pt-1">Ver más costos ▾</button>
+              <div data-mas-costos class="hidden space-y-2 pt-2 border-t border-slate-100">
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Costos directos por estadía</p>
+                <label class="block text-sm text-slate-500">Lavado de sábanas y toallas</label>
+                <input data-field="costosDirectos.lavanderia" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+                <label class="block text-sm text-slate-500">Limpieza / Insumos de limpieza</label>
+                <input data-field="costosDirectos.limpieza" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+                <label class="block text-sm text-slate-500">Amenities de baño</label>
+                <input data-field="costosDirectos.amenities" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+                <label class="block text-sm text-slate-500">Suministros de cocina</label>
+                <input data-field="costosDirectos.suministrosCocina" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide pt-2">Cortesías por huésped</p>
+                <label class="block text-sm text-slate-500">Costo unitario de agua embotellada</label>
+                <input data-field="cortesias.aguaCostoUnitario" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+                <label class="block text-sm text-slate-500">Botellas de agua por reserva</label>
+                <input data-field="cortesias.aguaCantidad" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+                <label class="block text-sm text-slate-500">Snacks / frutas de bienvenida (por reserva)</label>
+                <input data-field="cortesias.snacksCostoPorReserva" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              </div>
+            </div>
           </div>
-          <button id="btn-agregar-feriado" type="button" class="text-emerald-500 font-medium">+ Agregar fiesta local</button>
-        </div>
-      </div>
 
-      <div class="bg-slate-900 text-white rounded-xl p-4 space-y-2">
-        <h2 class="font-semibold">Tarifas Sugeridas</h2>
-        <div class="grid md:grid-cols-3 gap-4 text-sm">
-          <div><p class="text-slate-400">Noche regular / temporada baja</p><p id="kpi-tarifa-regular" class="text-2xl font-bold text-emerald-400"></p></div>
-          <div><p class="text-slate-400">Noche feriado / temporada alta</p><p id="kpi-tarifa-feriado" class="text-2xl font-bold text-emerald-400"></p></div>
-          <div>
-            <p class="text-slate-400">Persona adicional recomendada</p>
-            <p id="kpi-tarifa-persona-extra" class="text-2xl font-bold text-emerald-400"></p>
-            <button id="btn-usar-recomendacion-persona" type="button" class="text-xs text-emerald-400 hover:underline mt-1">Usar este valor →</button>
+          <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+            <button type="button" data-accordion-toggle="acc-configuracion" class="w-full flex items-center gap-3 p-4 text-left">
+              <div class="w-9 h-9 shrink-0 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-base">🛏️</div>
+              <span class="font-semibold flex-1">2. Configuración</span>
+              <span data-accordion-chevron="acc-configuracion" class="text-slate-400 transition-transform">▾</span>
+            </button>
+            <div data-accordion-panel="acc-configuracion" class="px-4 pb-4 space-y-2">
+              <label class="block text-sm text-slate-500">Habitaciones</label>
+              <input data-field="configuracion.habitaciones" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Baños</label>
+              <input data-field="configuracion.banos" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Capacidad base (huéspedes)</label>
+              <input data-field="configuracion.capacidadBase" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Capacidad máxima</label>
+              <input data-field="configuracion.capacidadMaxima" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Costo huésped extra ($/noche)</label>
+              <input data-field="configuracion.costoHuespedExtra" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">% recomendado para persona adicional</label>
+              <input data-field="configuracion.porcentajePersonaAdicional" type="number" min="0" max="100" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Huéspedes en la simulación</label>
+              <input data-field="simulacion.huespedesReales" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Utilidad neta deseada ($/noche)</label>
+              <input data-field="simulacion.utilidadDeseadaPorNoche" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <label class="block text-sm text-slate-500">Promedio noches por reserva</label>
+              <input data-field="simulacion.promedioNochesPorReserva" type="number" min="1" step="0.1" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2">
-        <h2 class="font-semibold">Estrategias de Precio</h2>
-        <p class="text-xs text-slate-500">Para que sepas cuánto margen tienes antes de perder rentabilidad.</p>
-        <div class="grid md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <p class="text-slate-500">Descuento máximo recomendado</p>
-            <p id="kpi-descuento-maximo" class="text-lg font-semibold text-emerald-500"></p>
+          <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+            <button type="button" data-accordion-toggle="acc-estacionalidad" class="w-full flex items-center gap-3 p-4 text-left">
+              <div class="w-9 h-9 shrink-0 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-base">📅</div>
+              <span class="font-semibold flex-1">3. Estacionalidad</span>
+              <span data-accordion-chevron="acc-estacionalidad" class="text-slate-400 transition-transform">▾</span>
+            </button>
+            <div data-accordion-panel="acc-estacionalidad" class="px-4 pb-4 space-y-2">
+              <label class="block text-sm text-slate-500">Ciudad</label>
+              <select data-field="estacionalidad.ciudad" class="w-full rounded-lg border-slate-200 border px-2 py-1"></select>
+              <label class="block text-sm text-slate-500">Factor incremento temp. alta (%)</label>
+              <input data-field="estacionalidad.factorIncrementoTemporadaAlta" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+              <div class="pt-2 space-y-2">
+                <button type="button" id="btn-abrir-feriados" class="w-full flex items-center gap-2 justify-center bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium">🗓️ Ver feriados y fiestas</button>
+                <button type="button" id="btn-administrar-temporadas" class="w-full flex items-center gap-2 justify-center bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium">📊 Administrar temporadas</button>
+              </div>
+            </div>
           </div>
-          <div>
-            <p class="text-slate-500">Precio mínimo rentable (noche)</p>
-            <p id="kpi-precio-minimo" class="text-lg font-semibold"></p>
+        </aside>
+
+        <div class="space-y-6 min-w-0">
+      <div class="bg-white border border-slate-200 rounded-xl p-4 sm:p-6">
+        <div class="flex items-center gap-3 mb-4 flex-wrap">
+          <h2 class="font-semibold text-lg">Tarifas Sugeridas</h2>
+          <span id="badge-ciudad" class="text-xs bg-slate-100 text-slate-600 rounded-full px-3 py-1"></span>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="border border-slate-100 rounded-xl p-4 text-center">
+            <div class="w-10 h-10 mx-auto rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg mb-2">🛏️</div>
+            <p class="font-semibold text-sm">Noche regular</p>
+            <p class="text-xs text-slate-500 mb-2">Temporada baja</p>
+            <p id="kpi-tarifa-regular" class="text-2xl font-bold text-slate-900"></p>
           </div>
-          <div>
-            <p class="text-slate-500">Noches mínimas recomendadas por reserva</p>
-            <p id="kpi-noches-minimas" class="text-lg font-semibold"></p>
+          <div class="border border-slate-100 rounded-xl p-4 text-center">
+            <div class="w-10 h-10 mx-auto rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-lg mb-2">☀️</div>
+            <p class="font-semibold text-sm">Noche feriado</p>
+            <p class="text-xs text-slate-500 mb-2">Temporada alta</p>
+            <p id="kpi-tarifa-feriado" class="text-2xl font-bold text-slate-900"></p>
+          </div>
+          <div class="border border-slate-100 rounded-xl p-4 text-center">
+            <div class="w-10 h-10 mx-auto rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-lg mb-2">👤</div>
+            <p class="font-semibold text-sm">Persona adicional</p>
+            <p class="text-xs text-slate-500 mb-2">Recomendada</p>
+            <p id="kpi-tarifa-persona-extra" class="text-2xl font-bold text-slate-900"></p>
+            <button id="btn-usar-recomendacion-persona" type="button" class="mt-2 text-xs bg-emerald-500 hover:bg-emerald-600 text-white rounded-full px-3 py-1.5 font-medium">Usar este valor →</button>
           </div>
         </div>
       </div>
 
-      <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-4">
-        <h2 class="font-semibold">Proyección Mensual</h2>
-        <div class="flex items-center justify-between">
-          <label class="block text-sm text-slate-500">Noches ocupadas al mes</label>
-          <span id="kpi-noches-ocupadas" class="text-sm font-semibold text-slate-900"></span>
+      <div class="bg-white border border-slate-200 rounded-xl p-4 sm:p-6">
+        <div class="flex items-center gap-3 mb-1 flex-wrap">
+          <h2 class="font-semibold text-lg">Estrategias de Precio</h2>
+          <span class="text-xs bg-amber-100 text-amber-700 rounded-full px-3 py-1">Para proteger tu rentabilidad</span>
         </div>
-        <input data-field="simulacion.nochesOcupadasMes" type="range" min="1" max="30" class="w-full" />
-        <div class="grid md:grid-cols-3 gap-4 text-sm">
-          <div><p class="text-slate-500">Ingreso Bruto Recaudado</p><p id="kpi-ingreso-bruto" class="text-lg font-semibold"></p></div>
-          <div><p class="text-slate-500">Comisión Airbnb (15.5%)</p><p id="kpi-comision" class="text-lg font-semibold text-red-500"></p></div>
-          <div><p class="text-slate-500">Depósito de Airbnb ("Ganas")</p><p id="kpi-deposito-airbnb" class="text-lg font-semibold"></p></div>
-          <div><p class="text-slate-500">IVA (15%, obligación aparte)</p><p id="kpi-iva" class="text-lg font-semibold text-red-500"></p></div>
-          <div><p class="text-slate-500">Gastos Operativos Totales</p><p id="kpi-gastos" class="text-lg font-semibold text-red-500"></p></div>
-          <div><p class="text-slate-500">Utilidad Neta Real</p><p id="kpi-utilidad" class="text-lg font-semibold text-emerald-500"></p></div>
-          <div><p class="text-slate-500">Margen de Ganancia</p><p id="kpi-margen" class="text-lg font-semibold text-emerald-500"></p></div>
-          <div><p class="text-slate-500">Punto de Equilibrio</p><p id="kpi-break-even" class="text-lg font-semibold"></p></div>
+        <p class="text-xs text-slate-500 mb-4">Para que sepas cuánto margen tienes antes de perder rentabilidad.</p>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="border border-slate-100 rounded-xl p-4">
+            <p class="text-slate-500 text-sm mb-1">Descuento máximo recomendado</p>
+            <p id="kpi-descuento-maximo" class="text-2xl font-bold text-amber-600"></p>
+          </div>
+          <div class="border border-slate-100 rounded-xl p-4">
+            <p class="text-slate-500 text-sm mb-1">Precio mínimo rentable (noche)</p>
+            <p id="kpi-precio-minimo" class="text-2xl font-bold text-slate-900"></p>
+          </div>
+          <div class="border border-slate-100 rounded-xl p-4">
+            <p class="text-slate-500 text-sm mb-1">Noches mínimas por reserva</p>
+            <p id="kpi-noches-minimas" class="text-2xl font-bold text-indigo-600"></p>
+          </div>
         </div>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+          <div class="flex items-center gap-3 flex-wrap">
+            <h2 class="font-semibold text-lg">Proyección Mensual</h2>
+            <span id="badge-noches" class="text-xs bg-slate-100 text-slate-600 rounded-full px-3 py-1"></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-sm text-slate-500">Noches ocupadas al mes</label>
+            <input data-field="simulacion.nochesOcupadasMes" type="number" min="1" max="30" class="w-20 rounded-lg border border-slate-200 px-2 py-1 text-right" />
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
+            <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">📈</div>
+            <div><p class="text-slate-500 text-xs">Ingreso Bruto Recaudado</p><p id="kpi-ingreso-bruto" class="text-lg font-semibold"></p></div>
+          </div>
+          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
+            <div class="w-9 h-9 shrink-0 rounded-full bg-red-100 text-red-600 flex items-center justify-center">🏠</div>
+            <div><p class="text-slate-500 text-xs">Comisión Airbnb (15.5%)</p><p id="kpi-comision" class="text-lg font-semibold text-red-500"></p></div>
+          </div>
+          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
+            <div class="w-9 h-9 shrink-0 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center">👛</div>
+            <div><p class="text-slate-500 text-xs">Depósito de Airbnb ("Ganas")</p><p id="kpi-deposito-airbnb" class="text-lg font-semibold"></p></div>
+          </div>
+          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
+            <div class="w-9 h-9 shrink-0 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">📄</div>
+            <div><p class="text-slate-500 text-xs">IVA (15%, obligación aparte)</p><p id="kpi-iva" class="text-lg font-semibold text-red-500"></p></div>
+          </div>
+          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
+            <div class="w-9 h-9 shrink-0 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center">📊</div>
+            <div><p class="text-slate-500 text-xs">Gastos Operativos Totales</p><p id="kpi-gastos" class="text-lg font-semibold text-red-500"></p></div>
+          </div>
+          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
+            <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">💵</div>
+            <div><p class="text-slate-500 text-xs">Utilidad Neta Real</p><p id="kpi-utilidad" class="text-lg font-semibold text-emerald-500"></p></div>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4 border-t border-slate-100 pt-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">📈</div>
+            <div><p class="text-slate-500 text-sm">Margen de Ganancia</p><p id="kpi-margen" class="text-xl font-bold text-emerald-500"></p></div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 shrink-0 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">⚖️</div>
+            <div><p class="text-slate-500 text-sm">Punto de Equilibrio</p><p id="kpi-break-even" class="text-xl font-bold text-indigo-600"></p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-4">
         <div class="bg-white border border-slate-200 rounded-xl p-4">
           <h2 class="font-semibold mb-2">Distribución de Costos</h2>
-          <canvas id="chart-doughnut"></canvas>
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <div class="relative w-full max-w-[140px] shrink-0">
+              <canvas id="chart-doughnut"></canvas>
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-2">
+                <span id="doughnut-total" class="text-sm font-bold text-slate-900 text-center leading-tight"></span>
+                <span class="text-[10px] text-slate-500">Ingreso Bruto</span>
+              </div>
+            </div>
+            <ul id="doughnut-legend" class="flex-1 min-w-0 text-sm space-y-2"></ul>
+          </div>
         </div>
         <div class="bg-white border border-slate-200 rounded-xl p-4">
           <h2 class="font-semibold mb-2">Noches Ocupadas vs. Utilidad Neta</h2>
@@ -362,10 +409,10 @@
       </div>
 
       <div class="bg-white border border-slate-200 rounded-xl p-4">
-        <button id="btn-toggle-formulas" type="button" class="flex items-center justify-between w-full font-semibold text-left">
-          <span>🧮 Ver fórmulas y valores usados</span>
-          <span class="text-slate-500 text-sm">Validar cálculos</span>
-        </button>
+        <div class="flex flex-wrap gap-3">
+          <button id="btn-toggle-formulas" type="button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full px-4 py-2 font-semibold text-sm">🧮 Ver fórmulas y valores usados</button>
+          <span class="flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-4 py-2 text-sm font-medium">✅ Validar cálculos</span>
+        </div>
         <div id="formulas-panel" class="hidden mt-4 space-y-4 text-sm">
           <div class="border-t border-slate-200 pt-3 first:border-0 first:pt-0">
             <p class="text-slate-500">Costo Fijo Diario = (Σ Costos Fijos Mensuales) / 30</p>
@@ -431,10 +478,34 @@
           </div>
         </div>
       </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="max-w-6xl mx-auto px-6 py-6 text-center text-xs text-slate-500">
+  <div id="modal-feriados" class="hidden print:hidden fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-4 relative min-w-0">
+      <button id="btn-cerrar-feriados" class="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-xl leading-none">×</button>
+      <h2 class="font-semibold text-lg">Feriados y Fiestas Locales</h2>
+      <p class="text-xs text-slate-500">Las 24 provincias y sus cantones — los precios de temporada suelen variar por sector.</p>
+      <div class="overflow-x-auto">
+        <table id="tabla-feriados" class="w-full text-sm min-w-[560px]">
+          <thead>
+            <tr class="text-slate-500 text-left">
+              <th class="px-3 py-2">Nombre</th>
+              <th class="px-3 py-2">Fecha</th>
+              <th class="px-3 py-2">Tipo</th>
+              <th class="px-3 py-2"></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button id="btn-agregar-feriado" type="button" class="text-emerald-500 font-medium">+ Agregar fiesta local</button>
+    </div>
+  </div>
+
+  <footer class="print:hidden max-w-6xl mx-auto px-6 py-6 text-center text-xs text-slate-500">
     Creado por Byron Lima · Instagram
     <a href="https://instagram.com/math3son" target="_blank" rel="noopener" class="text-emerald-500 hover:underline">@math3son</a>
     · 0989452132 · Código en
