@@ -65,7 +65,7 @@ window.Sim = window.Sim || {};
       );
       curvaUtilidad.push({ noches, utilidad: p.utilidadNeta });
     }
-    return { costoFijoDiario, costosFijosMensuales, costoDirectoPorReserva, tarifa, tarifaPersonaAdicional, tarifaFeriado, puntoEquilibrio, proyeccion, curvaUtilidad };
+    return { costoFijoDiario, costosFijosMensuales, costoDirectoPorReserva, tarifa, tarifaPersonaAdicional, tarifaFeriado, margenContribucion, puntoEquilibrio, proyeccion, curvaUtilidad };
   }
 
   function bindNumberInput(root, path, getValue, onChange) {
@@ -82,6 +82,7 @@ window.Sim = window.Sim || {};
     root.querySelector('#kpi-tarifa-feriado').textContent = fmt.format(results.tarifaFeriado.precioFinal);
     root.querySelector('#kpi-tarifa-persona-extra').textContent = fmt.format(state.configuracion.costoHuespedExtra);
 
+    root.querySelector('#kpi-noches-ocupadas').textContent = `${state.simulacion.nochesOcupadasMes} noches`;
     root.querySelector('#kpi-ingreso-bruto').textContent = fmt.format(results.proyeccion.ingresoBrutoRecaudado);
     root.querySelector('#kpi-comision').textContent = fmt.format(results.proyeccion.comisionTotal);
     root.querySelector('#kpi-iva').textContent = fmt.format(results.proyeccion.ivaTotal);
@@ -93,8 +94,64 @@ window.Sim = window.Sim || {};
 
     renderDoughnutChart(root.querySelector('#chart-doughnut'), results.proyeccion);
     renderBarChart(root.querySelector('#chart-bar'), results.curvaUtilidad);
+    renderFormulas(root, state, results);
 
     return results;
+  }
+
+  function renderFormulas(root, state, results) {
+    const { costosFijos, costosDirectos, cortesias, configuracion, estacionalidad, simulacion } = state;
+    const noches = simulacion.promedioNochesPorReserva > 0 ? simulacion.promedioNochesPorReserva : 1;
+
+    root.querySelector('#formula-costo-fijo').textContent =
+      `= (${fmt.format(costosFijos.alicuota)} + ${fmt.format(costosFijos.internet)} + ${fmt.format(costosFijos.seguro)} + ` +
+      `${fmt.format(costosFijos.agua)} + ${fmt.format(costosFijos.luz)} + ${fmt.format(costosFijos.otros)}) / 30 = ` +
+      `${fmt.format(results.costosFijosMensuales)} / 30 = ${fmt.format(results.costoFijoDiario)}`;
+
+    root.querySelector('#formula-costo-directo').textContent =
+      `= ${fmt.format(costosDirectos.lavanderia)} + ${fmt.format(costosDirectos.limpieza)} + ${fmt.format(costosDirectos.amenities)} + ` +
+      `${fmt.format(costosDirectos.suministrosCocina)} + (${fmt.format(cortesias.aguaCostoUnitario)} × ${cortesias.aguaCantidad}) + ` +
+      `${fmt.format(cortesias.snacksCostoPorReserva)} = ${fmt.format(results.costoDirectoPorReserva)}`;
+
+    root.querySelector('#formula-ingreso-neto').textContent =
+      `= ${fmt.format(simulacion.utilidadDeseadaPorNoche)} + ${fmt.format(results.costoFijoDiario)} + ` +
+      `(${fmt.format(results.costoDirectoPorReserva)} / ${noches}) = ${fmt.format(results.tarifa.ingresoNetoNecesario)}`;
+
+    root.querySelector('#formula-precio-base').textContent =
+      `= ${fmt.format(results.tarifa.ingresoNetoNecesario)} / (1 − 0.155) = ${fmt.format(results.tarifa.precioBase)}`;
+
+    root.querySelector('#formula-iva').textContent =
+      `= ${fmt.format(results.tarifa.precioBase)} × 0.15 = ${fmt.format(results.tarifa.montoIVA)}`;
+
+    root.querySelector('#formula-precio-final').textContent =
+      `= ${fmt.format(results.tarifa.precioBase)} + ${fmt.format(results.tarifa.montoIVA)} = ${fmt.format(results.tarifa.precioFinal)}`;
+
+    root.querySelector('#formula-comision').textContent =
+      `= ${fmt.format(results.tarifa.precioBase)} × 0.155 = ${fmt.format(results.tarifa.comisionAirbnb)}`;
+
+    root.querySelector('#formula-feriado').textContent =
+      `= ${fmt.format(results.tarifa.precioBase)} × (1 + ${estacionalidad.factorIncrementoTemporadaAlta}%) = ${fmt.format(results.tarifaFeriado.precioBase)} ` +
+      `→ + IVA ${fmt.format(results.tarifaFeriado.montoIVA)} = ${fmt.format(results.tarifaFeriado.precioFinal)} al huésped`;
+
+    root.querySelector('#formula-persona-adicional').textContent =
+      simulacion.huespedesReales > configuracion.capacidadBase
+        ? `= ${fmt.format(results.tarifa.precioBase)} + ((${simulacion.huespedesReales} − ${configuracion.capacidadBase}) × ${fmt.format(configuracion.costoHuespedExtra)}) = ${fmt.format(results.tarifaPersonaAdicional)}`
+        : `Huéspedes reales (${simulacion.huespedesReales}) no supera la capacidad base (${configuracion.capacidadBase}) → no se aplica cargo extra.`;
+
+    root.querySelector('#formula-margen-contribucion').textContent =
+      `= ${fmt.format(results.tarifa.precioBase)} − ${fmt.format(results.tarifa.comisionAirbnb)} − (${fmt.format(results.costoDirectoPorReserva)} / ${noches}) = ${fmt.format(results.margenContribucion)}`;
+
+    root.querySelector('#formula-break-even').textContent =
+      results.puntoEquilibrio === Infinity
+        ? `= ${fmt.format(results.costosFijosMensuales)} / ${fmt.format(results.margenContribucion)} → no alcanzable (el margen de contribución no es positivo)`
+        : `= ${fmt.format(results.costosFijosMensuales)} / ${fmt.format(results.margenContribucion)} = ${results.puntoEquilibrio} noches/mes`;
+  }
+
+  function bindFormulasToggle(root) {
+    const btn = root.querySelector('#btn-toggle-formulas');
+    const panel = root.querySelector('#formulas-panel');
+    if (!btn || !panel) return;
+    btn.addEventListener('click', () => panel.classList.toggle('hidden'));
   }
 
   function renderFeriados(root, feriados, onChange) {
@@ -189,5 +246,5 @@ window.Sim = window.Sim || {};
     showStep(tabs[0]?.dataset.stepTab);
   }
 
-  window.Sim.ui = { renderDashboard, renderFeriados, bindStepForm, bindStepNavigation };
+  window.Sim.ui = { renderDashboard, renderFeriados, bindStepForm, bindStepNavigation, bindFormulasToggle };
 })();

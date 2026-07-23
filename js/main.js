@@ -1,7 +1,7 @@
 // js/main.js
 (function () {
   const { createDefaultState, mergeState } = window.Sim.state;
-  const { bindStepForm, bindStepNavigation, renderDashboard, renderFeriados } = window.Sim.ui;
+  const { bindStepForm, bindStepNavigation, renderDashboard, renderFeriados, bindFormulasToggle } = window.Sim.ui;
   const {
     isFileSystemAccessSupported,
     createNewFile,
@@ -35,6 +35,7 @@
     document.getElementById('app-screen').classList.remove('hidden');
     const root = document.getElementById('app-screen');
     bindStepNavigation(root);
+    bindFormulasToggle(root);
 
     function render() {
       renderDashboard(root, state);

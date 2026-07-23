@@ -155,7 +155,10 @@
 
       <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-4">
         <h2 class="font-semibold">Proyección Mensual</h2>
-        <label class="block text-sm text-slate-500">Noches ocupadas al mes</label>
+        <div class="flex items-center justify-between">
+          <label class="block text-sm text-slate-500">Noches ocupadas al mes</label>
+          <span id="kpi-noches-ocupadas" class="text-sm font-semibold text-slate-900"></span>
+        </div>
         <input data-field="simulacion.nochesOcupadasMes" type="range" min="1" max="30" class="w-full" />
         <div class="grid md:grid-cols-3 gap-4 text-sm">
           <div><p class="text-slate-500">Ingreso Bruto Recaudado</p><p id="kpi-ingreso-bruto" class="text-lg font-semibold"></p></div>
@@ -176,6 +179,57 @@
         <div class="bg-white border border-slate-200 rounded-xl p-4">
           <h2 class="font-semibold mb-2">Noches Ocupadas vs. Utilidad Neta</h2>
           <canvas id="chart-bar"></canvas>
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-xl p-4">
+        <button id="btn-toggle-formulas" type="button" class="flex items-center justify-between w-full font-semibold text-left">
+          <span>🧮 Ver fórmulas y valores usados</span>
+          <span class="text-slate-500 text-sm">Validar cálculos</span>
+        </button>
+        <div id="formulas-panel" class="hidden mt-4 space-y-4 text-sm">
+          <div class="border-t border-slate-200 pt-3 first:border-0 first:pt-0">
+            <p class="text-slate-500">Costo Fijo Diario = (Σ Costos Fijos Mensuales) / 30</p>
+            <p id="formula-costo-fijo" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Costo Directo por Reserva = Lavandería + Limpieza + Amenities + Suministros + (Agua × cantidad) + Snacks</p>
+            <p id="formula-costo-directo" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Ingreso Neto Necesario = Utilidad Deseada + Costo Fijo Diario + (Costo Directo / Promedio Noches por Reserva)</p>
+            <p id="formula-ingreso-neto" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Precio Base a Publicar = Ingreso Neto Necesario / (1 − 0.155)</p>
+            <p id="formula-precio-base" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Monto IVA (15%) = Precio Base × 0.15</p>
+            <p id="formula-iva" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Precio Final al Huésped = Precio Base + Monto IVA</p>
+            <p id="formula-precio-final" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Comisión Airbnb Retenida = Precio Base × 0.155</p>
+            <p id="formula-comision" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Tarifa Feriado / Temporada Alta = Precio Base × (1 + Factor Incremento %), luego se recalculan IVA y comisión sobre ese nuevo precio</p>
+            <p id="formula-feriado" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Tarifa Persona Adicional = Precio Base + ((Huéspedes Reales − Capacidad Base) × Costo Huésped Extra), solo si Huéspedes Reales &gt; Capacidad Base</p>
+            <p id="formula-persona-adicional" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Margen de Contribución por Noche = Precio Base − Comisión Airbnb − (Costo Directo / Promedio Noches por Reserva)</p>
+            <p id="formula-margen-contribucion" class="font-mono text-slate-900"></p>
+            <p class="text-slate-500 mt-2">Punto de Equilibrio = Costos Fijos Mensuales / Margen de Contribución por Noche</p>
+            <p id="formula-break-even" class="font-mono text-slate-900"></p>
+          </div>
         </div>
       </div>
     </section>
