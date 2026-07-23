@@ -34,21 +34,22 @@ window.Sim = window.Sim || {};
       promedioNochesPorReserva: state.simulacion.promedioNochesPorReserva,
     });
     const tarifaPersonaAdicional = calcTarifaPersonaAdicional(
-      tarifa.precioBase,
+      tarifa.precioFinal,
       state.simulacion.huespedesReales,
       state.configuracion.capacidadBase,
       state.configuracion.costoHuespedExtra,
     );
-    const tarifaFeriado = calcTarifaFeriado(tarifa.precioBase, state.estacionalidad.factorIncrementoTemporadaAlta);
+    const tarifaFeriado = calcTarifaFeriado(tarifa.precioFinal, state.estacionalidad.factorIncrementoTemporadaAlta);
     const margenContribucion = calcMargenContribucionPorNoche({
-      precioBase: tarifa.precioBase,
+      precioFinal: tarifa.precioFinal,
       comisionAirbnb: tarifa.comisionAirbnb,
+      montoIVA: tarifa.montoIVA,
       costoDirectoPorReserva,
       promedioNochesPorReserva: state.simulacion.promedioNochesPorReserva,
     });
     const puntoEquilibrio = calcPuntoEquilibrio(costosFijosMensuales, margenContribucion);
     const personaAdicionalRecomendada = calcTarifaPersonaAdicionalRecomendada(
-      tarifa.precioBase,
+      tarifa.precioFinal,
       state.configuracion.capacidadBase,
       state.configuracion.porcentajePersonaAdicional,
     );
@@ -57,17 +58,18 @@ window.Sim = window.Sim || {};
       costoFijoDiario,
       costoDirecto: costoDirectoPorReserva,
       promedioNochesPorReserva: state.simulacion.promedioNochesPorReserva,
-    }).precioBase;
-    const descuentoMaximo = calcDescuentoMaximo(tarifa.precioBase, precioMinimoRentable);
+    }).precioFinal;
+    const descuentoMaximo = calcDescuentoMaximo(tarifa.precioFinal, precioMinimoRentable);
     const nochesMinimasRentables = calcNochesMinimasRentables(
       costoDirectoPorReserva,
-      tarifa.precioBase,
+      tarifa.precioFinal,
       tarifa.comisionAirbnb,
+      tarifa.montoIVA,
       costoFijoDiario,
     );
     const proyeccion = calcProyeccionMensual(
       {
-        precioBase: tarifa.precioBase,
+        precioFinal: tarifa.precioFinal,
         costoDirectoPorReserva,
         promedioNochesPorReserva: state.simulacion.promedioNochesPorReserva,
         costosFijosMensuales,
@@ -78,7 +80,7 @@ window.Sim = window.Sim || {};
     for (let noches = 1; noches <= 30; noches++) {
       const p = calcProyeccionMensual(
         {
-          precioBase: tarifa.precioBase,
+          precioFinal: tarifa.precioFinal,
           costoDirectoPorReserva,
           promedioNochesPorReserva: state.simulacion.promedioNochesPorReserva,
           costosFijosMensuales,
@@ -165,28 +167,28 @@ window.Sim = window.Sim || {};
       `(${fmt.format(results.costoDirectoPorReserva)} / ${noches}) = ${fmt.format(results.tarifa.ingresoNetoNecesario)}`;
 
     root.querySelector('#formula-precio-base').textContent =
-      `= ${fmt.format(results.tarifa.ingresoNetoNecesario)} / (1 − 0.155) = ${fmt.format(results.tarifa.precioBase)}`;
+      `= ${fmt.format(results.tarifa.ingresoNetoNecesario)} / (1 − 0.155 − 0.15) = ${fmt.format(results.tarifa.precioFinal)}`;
 
     root.querySelector('#formula-iva').textContent =
-      `= ${fmt.format(results.tarifa.precioBase)} × 0.15 = ${fmt.format(results.tarifa.montoIVA)}`;
-
-    root.querySelector('#formula-precio-final').textContent =
-      `= ${fmt.format(results.tarifa.precioBase)} + ${fmt.format(results.tarifa.montoIVA)} = ${fmt.format(results.tarifa.precioFinal)}`;
+      `= ${fmt.format(results.tarifa.precioFinal)} × 0.15 = ${fmt.format(results.tarifa.montoIVA)}`;
 
     root.querySelector('#formula-comision').textContent =
-      `= ${fmt.format(results.tarifa.precioBase)} × 0.155 = ${fmt.format(results.tarifa.comisionAirbnb)}`;
+      `= ${fmt.format(results.tarifa.precioFinal)} × 0.155 = ${fmt.format(results.tarifa.comisionAirbnb)}`;
+
+    root.querySelector('#formula-precio-final').textContent =
+      `= ${fmt.format(results.tarifa.precioFinal)} − ${fmt.format(results.tarifa.comisionAirbnb)} − ${fmt.format(results.tarifa.montoIVA)} = ${fmt.format(results.tarifa.ingresoNetoRecibido)}`;
 
     root.querySelector('#formula-feriado').textContent =
-      `= ${fmt.format(results.tarifa.precioBase)} × (1 + ${estacionalidad.factorIncrementoTemporadaAlta}%) = ${fmt.format(results.tarifaFeriado.precioBase)} ` +
-      `→ + IVA ${fmt.format(results.tarifaFeriado.montoIVA)} = ${fmt.format(results.tarifaFeriado.precioFinal)} al huésped`;
+      `= ${fmt.format(results.tarifa.precioFinal)} × (1 + ${estacionalidad.factorIncrementoTemporadaAlta}%) = ${fmt.format(results.tarifaFeriado.precioFinal)} al huésped ` +
+      `(comisión ${fmt.format(results.tarifaFeriado.comisionAirbnb)}, IVA ${fmt.format(results.tarifaFeriado.montoIVA)})`;
 
     root.querySelector('#formula-persona-adicional').textContent =
       simulacion.huespedesReales > configuracion.capacidadBase
-        ? `= ${fmt.format(results.tarifa.precioBase)} + ((${simulacion.huespedesReales} − ${configuracion.capacidadBase}) × ${fmt.format(configuracion.costoHuespedExtra)}) = ${fmt.format(results.tarifaPersonaAdicional)}`
+        ? `= ${fmt.format(results.tarifa.precioFinal)} + ((${simulacion.huespedesReales} − ${configuracion.capacidadBase}) × ${fmt.format(configuracion.costoHuespedExtra)}) = ${fmt.format(results.tarifaPersonaAdicional)}`
         : `Huéspedes reales (${simulacion.huespedesReales}) no supera la capacidad base (${configuracion.capacidadBase}) → no se aplica cargo extra.`;
 
     root.querySelector('#formula-margen-contribucion').textContent =
-      `= ${fmt.format(results.tarifa.precioBase)} − ${fmt.format(results.tarifa.comisionAirbnb)} − (${fmt.format(results.costoDirectoPorReserva)} / ${noches}) = ${fmt.format(results.margenContribucion)}`;
+      `= ${fmt.format(results.tarifa.precioFinal)} − ${fmt.format(results.tarifa.comisionAirbnb)} − ${fmt.format(results.tarifa.montoIVA)} − (${fmt.format(results.costoDirectoPorReserva)} / ${noches}) = ${fmt.format(results.margenContribucion)}`;
 
     root.querySelector('#formula-break-even').textContent =
       results.puntoEquilibrio === Infinity
@@ -194,20 +196,21 @@ window.Sim = window.Sim || {};
         : `= ${fmt.format(results.costosFijosMensuales)} / ${fmt.format(results.margenContribucion)} = ${results.puntoEquilibrio} noches/mes`;
 
     root.querySelector('#formula-persona-recomendada').textContent =
-      `= (${fmt.format(results.tarifa.precioBase)} / ${configuracion.capacidadBase}) × (${configuracion.porcentajePersonaAdicional}% / 100) = ` +
-      `${fmt.format(results.tarifa.precioBase / (configuracion.capacidadBase || 1))} × ${configuracion.porcentajePersonaAdicional}% = ${fmt.format(results.personaAdicionalRecomendada)}`;
+      `= (${fmt.format(results.tarifa.precioFinal)} / ${configuracion.capacidadBase}) × (${configuracion.porcentajePersonaAdicional}% / 100) = ` +
+      `${fmt.format(results.tarifa.precioFinal / (configuracion.capacidadBase || 1))} × ${configuracion.porcentajePersonaAdicional}% = ${fmt.format(results.personaAdicionalRecomendada)}`;
 
     root.querySelector('#formula-precio-minimo').textContent =
-      `Precio Mínimo Rentable = Precio Base con Utilidad Deseada = $0 = ${fmt.format(results.precioMinimoRentable)}`;
+      `Precio Mínimo Rentable = Precio Final recalculado con Utilidad Deseada = $0 = ${fmt.format(results.precioMinimoRentable)}`;
 
     root.querySelector('#formula-descuento-maximo').textContent =
-      `= ((${fmt.format(results.tarifa.precioBase)} − ${fmt.format(results.precioMinimoRentable)}) / ${fmt.format(results.tarifa.precioBase)}) × 100 = ${results.descuentoMaximo.toFixed(1)}%`;
+      `= ((${fmt.format(results.tarifa.precioFinal)} − ${fmt.format(results.precioMinimoRentable)}) / ${fmt.format(results.tarifa.precioFinal)}) × 100 = ${results.descuentoMaximo.toFixed(1)}%`;
 
+    const margenPorNocheConFijos = results.tarifa.precioFinal - results.tarifa.comisionAirbnb - results.tarifa.montoIVA - results.costoFijoDiario;
     root.querySelector('#formula-noches-minimas').textContent =
-      `Margen por Noche (con Costo Fijo) = ${fmt.format(results.tarifa.precioBase)} − ${fmt.format(results.tarifa.comisionAirbnb)} − ${fmt.format(results.costoFijoDiario)} = ${fmt.format(results.tarifa.precioBase - results.tarifa.comisionAirbnb - results.costoFijoDiario)}\n` +
+      `Margen por Noche (con Costo Fijo) = ${fmt.format(results.tarifa.precioFinal)} − ${fmt.format(results.tarifa.comisionAirbnb)} − ${fmt.format(results.tarifa.montoIVA)} − ${fmt.format(results.costoFijoDiario)} = ${fmt.format(margenPorNocheConFijos)}\n` +
       (results.nochesMinimasRentables === Infinity
         ? '→ no alcanzable (el margen por noche no es positivo)'
-        : `Noches Mínimas = ${fmt.format(results.costoDirectoPorReserva)} / ${fmt.format(results.tarifa.precioBase - results.tarifa.comisionAirbnb - results.costoFijoDiario)} = ${results.nochesMinimasRentables} noches`);
+        : `Noches Mínimas = ${fmt.format(results.costoDirectoPorReserva)} / ${fmt.format(margenPorNocheConFijos)} = ${results.nochesMinimasRentables} noches`);
   }
 
   function populateCiudadSelect(root, ciudadActual) {

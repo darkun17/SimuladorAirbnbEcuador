@@ -217,47 +217,47 @@
             <p id="formula-ingreso-neto" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Precio Base a Publicar = Ingreso Neto Necesario / (1 − 0.155)</p>
+            <p class="text-slate-500">Precio Final a Publicar = Ingreso Neto Necesario / (1 − 0.155 − 0.15). Comisión (15.5%) e IVA (15%) se calculan ambos directo sobre este precio — el que paga el huésped.</p>
             <p id="formula-precio-base" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Monto IVA (15%) = Precio Base × 0.15</p>
+            <p class="text-slate-500">Monto IVA (15%) = Precio Final × 0.15</p>
             <p id="formula-iva" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Precio Final al Huésped = Precio Base + Monto IVA</p>
-            <p id="formula-precio-final" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Comisión Airbnb Retenida = Precio Base × 0.155</p>
+            <p class="text-slate-500">Comisión Airbnb Retenida (15.5%) = Precio Final × 0.155</p>
             <p id="formula-comision" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Tarifa Feriado / Temporada Alta = Precio Base × (1 + Factor Incremento %), luego se recalculan IVA y comisión sobre ese nuevo precio</p>
+            <p class="text-slate-500">Ingreso Neto que Recibe el Anfitrión = Precio Final − Comisión − IVA (verificación: debe coincidir con el Ingreso Neto Necesario)</p>
+            <p id="formula-precio-final" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Tarifa Feriado / Temporada Alta = Precio Final × (1 + Factor Incremento %); comisión e IVA se recalculan sobre ese nuevo precio</p>
             <p id="formula-feriado" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Tarifa Persona Adicional = Precio Base + ((Huéspedes Reales − Capacidad Base) × Costo Huésped Extra), solo si Huéspedes Reales &gt; Capacidad Base</p>
+            <p class="text-slate-500">Tarifa Persona Adicional = Precio Final + ((Huéspedes Reales − Capacidad Base) × Costo Huésped Extra), solo si Huéspedes Reales &gt; Capacidad Base</p>
             <p id="formula-persona-adicional" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Persona Adicional Recomendada = (Precio Base / Capacidad Base) × (% recomendado / 100)</p>
+            <p class="text-slate-500">Persona Adicional Recomendada = (Precio Final / Capacidad Base) × (% recomendado / 100)</p>
             <p id="formula-persona-recomendada" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Precio Mínimo Rentable = Precio Base recalculado con Utilidad Neta Objetivo = $0 (cubre solo costos)</p>
+            <p class="text-slate-500">Precio Mínimo Rentable = Precio Final recalculado con Utilidad Neta Objetivo = $0 (cubre solo costos)</p>
             <p id="formula-precio-minimo" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Descuento Máximo Recomendado = ((Precio Base − Precio Mínimo Rentable) / Precio Base) × 100</p>
+            <p class="text-slate-500">Descuento Máximo Recomendado = ((Precio Final − Precio Mínimo Rentable) / Precio Final) × 100</p>
             <p id="formula-descuento-maximo" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Noches Mínimas Recomendadas = Costo Directo por Reserva / (Precio Base − Comisión Airbnb − Costo Fijo Diario)</p>
+            <p class="text-slate-500">Noches Mínimas Recomendadas = Costo Directo por Reserva / (Precio Final − Comisión Airbnb − IVA − Costo Fijo Diario)</p>
             <p id="formula-noches-minimas" class="font-mono text-slate-900 whitespace-pre-line"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Margen de Contribución por Noche = Precio Base − Comisión Airbnb − (Costo Directo / Promedio Noches por Reserva)</p>
+            <p class="text-slate-500">Margen de Contribución por Noche = Precio Final − Comisión Airbnb − IVA − (Costo Directo / Promedio Noches por Reserva)</p>
             <p id="formula-margen-contribucion" class="font-mono text-slate-900"></p>
             <p class="text-slate-500 mt-2">Punto de Equilibrio = Costos Fijos Mensuales / Margen de Contribución por Noche</p>
             <p id="formula-break-even" class="font-mono text-slate-900"></p>
