@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
-  <header class="print:hidden bg-slate-900 text-white px-4 sm:px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
+  <header class="print:hidden bg-slate-900 text-white px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3 flex-wrap">
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 shrink-0 rounded-lg bg-emerald-500 flex items-center justify-center text-lg">🏠</div>
       <h1 class="text-base sm:text-xl font-semibold">Simulador Financiero — Airbnb Ecuador</h1>
@@ -59,7 +59,7 @@
     </div>
   </div>
 
-  <main class="max-w-6xl mx-auto p-6">
+  <main class="max-w-7xl mx-auto p-3 sm:p-4">
     <section id="intro-info" class="print:hidden bg-white border border-slate-200 rounded-xl overflow-hidden mb-6">
       <div class="grid lg:grid-cols-2">
         <div class="relative pb-10 sm:pb-12">
@@ -197,8 +197,8 @@
     </section>
 
     <section id="app-screen" class="hidden">
-      <div class="grid lg:grid-cols-[340px_1fr] gap-6 items-start">
-        <aside class="print:hidden space-y-4 lg:sticky lg:top-6">
+      <div class="grid lg:grid-cols-[300px_1fr] gap-3 items-start">
+        <aside class="print:hidden space-y-3 lg:sticky lg:top-3 lg:max-h-[calc(100vh_-_1.5rem)] lg:overflow-y-auto">
           <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
             <button type="button" data-accordion-toggle="acc-costos" class="w-full flex items-center gap-3 p-4 text-left">
               <div class="w-9 h-9 shrink-0 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-base">💲</div>
@@ -288,130 +288,131 @@
           </div>
         </aside>
 
-        <div class="space-y-6 min-w-0">
-      <div class="bg-white border border-slate-200 rounded-xl p-4 sm:p-6">
-        <div class="flex items-center gap-3 mb-4 flex-wrap">
-          <h2 class="font-semibold text-lg">Tarifas Sugeridas</h2>
-          <span id="badge-ciudad" class="text-xs bg-slate-100 text-slate-600 rounded-full px-3 py-1"></span>
+        <div class="space-y-3 min-w-0">
+      <div class="grid xl:grid-cols-5 gap-3">
+      <div class="xl:col-span-3 bg-white border border-slate-200 rounded-xl p-3">
+        <div class="flex items-center gap-2 mb-2 flex-wrap">
+          <h2 class="font-semibold">Tarifas Sugeridas</h2>
+          <span id="badge-ciudad" class="text-xs bg-slate-100 text-slate-600 rounded-full px-2.5 py-0.5"></span>
         </div>
-        <div class="grid sm:grid-cols-3 gap-4">
-          <div class="border border-slate-100 rounded-xl p-4 text-center">
-            <div class="w-10 h-10 mx-auto rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg mb-2">🛏️</div>
-            <p class="font-semibold text-sm">Noche regular</p>
-            <p class="text-xs text-slate-500 mb-2">Temporada baja</p>
-            <p id="kpi-tarifa-regular" class="text-2xl font-bold text-slate-900"></p>
+        <div class="grid sm:grid-cols-3 gap-2">
+          <div class="border border-slate-100 rounded-lg p-2.5 text-center">
+            <div class="w-8 h-8 mx-auto rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm mb-1">🛏️</div>
+            <p class="font-semibold text-xs">Noche regular</p>
+            <p class="text-[11px] text-slate-500 mb-1">Temporada baja</p>
+            <p id="kpi-tarifa-regular" class="text-lg font-bold text-slate-900"></p>
           </div>
-          <div class="border border-slate-100 rounded-xl p-4 text-center">
-            <div class="w-10 h-10 mx-auto rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-lg mb-2">☀️</div>
-            <p class="font-semibold text-sm">Noche feriado</p>
-            <p class="text-xs text-slate-500 mb-2">Temporada alta</p>
-            <p id="kpi-tarifa-feriado" class="text-2xl font-bold text-slate-900"></p>
+          <div class="border border-slate-100 rounded-lg p-2.5 text-center">
+            <div class="w-8 h-8 mx-auto rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-sm mb-1">☀️</div>
+            <p class="font-semibold text-xs">Noche feriado</p>
+            <p class="text-[11px] text-slate-500 mb-1">Temporada alta</p>
+            <p id="kpi-tarifa-feriado" class="text-lg font-bold text-slate-900"></p>
           </div>
-          <div class="border border-slate-100 rounded-xl p-4 text-center">
-            <div class="w-10 h-10 mx-auto rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-lg mb-2">👤</div>
-            <p class="font-semibold text-sm">Persona adicional</p>
-            <p class="text-xs text-slate-500 mb-2">Recomendada</p>
-            <p id="kpi-tarifa-persona-extra" class="text-2xl font-bold text-slate-900"></p>
-            <button id="btn-usar-recomendacion-persona" type="button" class="mt-2 text-xs bg-emerald-500 hover:bg-emerald-600 text-white rounded-full px-3 py-1.5 font-medium">Usar este valor →</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white border border-slate-200 rounded-xl p-4 sm:p-6">
-        <div class="flex items-center gap-3 mb-1 flex-wrap">
-          <h2 class="font-semibold text-lg">Estrategias de Precio</h2>
-          <span class="text-xs bg-amber-100 text-amber-700 rounded-full px-3 py-1">Para proteger tu rentabilidad</span>
-        </div>
-        <p class="text-xs text-slate-500 mb-4">Para que sepas cuánto margen tienes antes de perder rentabilidad.</p>
-        <div class="grid sm:grid-cols-3 gap-4">
-          <div class="border border-slate-100 rounded-xl p-4">
-            <p class="text-slate-500 text-sm mb-1">Descuento máximo recomendado</p>
-            <p id="kpi-descuento-maximo" class="text-2xl font-bold text-amber-600"></p>
-          </div>
-          <div class="border border-slate-100 rounded-xl p-4">
-            <p class="text-slate-500 text-sm mb-1">Precio mínimo rentable (noche)</p>
-            <p id="kpi-precio-minimo" class="text-2xl font-bold text-slate-900"></p>
-          </div>
-          <div class="border border-slate-100 rounded-xl p-4">
-            <p class="text-slate-500 text-sm mb-1">Noches mínimas por reserva</p>
-            <p id="kpi-noches-minimas" class="text-2xl font-bold text-indigo-600"></p>
+          <div class="border border-slate-100 rounded-lg p-2.5 text-center">
+            <div class="w-8 h-8 mx-auto rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-sm mb-1">👤</div>
+            <p class="font-semibold text-xs">Persona adicional</p>
+            <p class="text-[11px] text-slate-500 mb-1">Recomendada</p>
+            <p id="kpi-tarifa-persona-extra" class="text-lg font-bold text-slate-900"></p>
+            <button id="btn-usar-recomendacion-persona" type="button" class="mt-1 text-[11px] bg-emerald-500 hover:bg-emerald-600 text-white rounded-full px-2 py-1 font-medium">Usar este valor →</button>
           </div>
         </div>
       </div>
 
-      <div class="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 space-y-4">
-        <div class="flex items-center justify-between flex-wrap gap-3">
-          <div class="flex items-center gap-3 flex-wrap">
-            <h2 class="font-semibold text-lg">Proyección Mensual</h2>
-            <span id="badge-noches" class="text-xs bg-slate-100 text-slate-600 rounded-full px-3 py-1"></span>
+      <div class="xl:col-span-2 bg-white border border-slate-200 rounded-xl p-3">
+        <div class="flex items-center gap-2 mb-1 flex-wrap">
+          <h2 class="font-semibold">Estrategias de Precio</h2>
+          <span class="text-xs bg-amber-100 text-amber-700 rounded-full px-2.5 py-0.5">Protege tu rentabilidad</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-2">
+          <div class="border border-slate-100 rounded-lg p-2">
+            <p class="text-slate-500 text-[11px] mb-0.5">Descuento máximo</p>
+            <p id="kpi-descuento-maximo" class="text-base font-bold text-amber-600"></p>
+          </div>
+          <div class="border border-slate-100 rounded-lg p-2">
+            <p class="text-slate-500 text-[11px] mb-0.5">Precio mínimo/noche</p>
+            <p id="kpi-precio-minimo" class="text-base font-bold text-slate-900"></p>
+          </div>
+          <div class="border border-slate-100 rounded-lg p-2">
+            <p class="text-slate-500 text-[11px] mb-0.5">Noches mínimas</p>
+            <p id="kpi-noches-minimas" class="text-base font-bold text-indigo-600"></p>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-xl p-3 space-y-2">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h2 class="font-semibold">Proyección Mensual</h2>
+            <span id="badge-noches" class="text-xs bg-slate-100 text-slate-600 rounded-full px-2.5 py-0.5"></span>
           </div>
           <div class="flex items-center gap-2">
-            <label class="text-sm text-slate-500">Noches ocupadas al mes</label>
-            <input data-field="simulacion.nochesOcupadasMes" type="number" min="1" max="30" class="w-20 rounded-lg border border-slate-200 px-2 py-1 text-right" />
+            <label class="text-xs text-slate-500">Noches ocupadas al mes</label>
+            <input data-field="simulacion.nochesOcupadasMes" type="number" min="1" max="30" class="w-16 rounded-lg border border-slate-200 px-2 py-1 text-right text-sm" />
           </div>
         </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
-            <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">📈</div>
-            <div><p class="text-slate-500 text-xs">Ingreso Bruto Recaudado</p><p id="kpi-ingreso-bruto" class="text-lg font-semibold"></p></div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+          <div class="border border-slate-100 rounded-lg p-2 flex items-center gap-2">
+            <div class="w-7 h-7 shrink-0 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm">📈</div>
+            <div><p class="text-slate-500 text-[10px] leading-tight">Ingreso Bruto</p><p id="kpi-ingreso-bruto" class="text-sm font-semibold"></p></div>
           </div>
-          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
-            <div class="w-9 h-9 shrink-0 rounded-full bg-red-100 text-red-600 flex items-center justify-center">🏠</div>
-            <div><p class="text-slate-500 text-xs">Comisión Airbnb (15.5%)</p><p id="kpi-comision" class="text-lg font-semibold text-red-500"></p></div>
+          <div class="border border-slate-100 rounded-lg p-2 flex items-center gap-2">
+            <div class="w-7 h-7 shrink-0 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-sm">🏠</div>
+            <div><p class="text-slate-500 text-[10px] leading-tight">Comisión (15.5%)</p><p id="kpi-comision" class="text-sm font-semibold text-red-500"></p></div>
           </div>
-          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
-            <div class="w-9 h-9 shrink-0 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center">👛</div>
-            <div><p class="text-slate-500 text-xs">Depósito de Airbnb ("Ganas")</p><p id="kpi-deposito-airbnb" class="text-lg font-semibold"></p></div>
+          <div class="border border-slate-100 rounded-lg p-2 flex items-center gap-2">
+            <div class="w-7 h-7 shrink-0 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-sm">👛</div>
+            <div><p class="text-slate-500 text-[10px] leading-tight">Depósito ("Ganas")</p><p id="kpi-deposito-airbnb" class="text-sm font-semibold"></p></div>
           </div>
-          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
-            <div class="w-9 h-9 shrink-0 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">📄</div>
-            <div><p class="text-slate-500 text-xs">IVA (15%, obligación aparte)</p><p id="kpi-iva" class="text-lg font-semibold text-red-500"></p></div>
+          <div class="border border-slate-100 rounded-lg p-2 flex items-center gap-2">
+            <div class="w-7 h-7 shrink-0 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-sm">📄</div>
+            <div><p class="text-slate-500 text-[10px] leading-tight">IVA (aparte)</p><p id="kpi-iva" class="text-sm font-semibold text-red-500"></p></div>
           </div>
-          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
-            <div class="w-9 h-9 shrink-0 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center">📊</div>
-            <div><p class="text-slate-500 text-xs">Gastos Operativos Totales</p><p id="kpi-gastos" class="text-lg font-semibold text-red-500"></p></div>
+          <div class="border border-slate-100 rounded-lg p-2 flex items-center gap-2">
+            <div class="w-7 h-7 shrink-0 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-sm">📊</div>
+            <div><p class="text-slate-500 text-[10px] leading-tight">Gastos Operativos</p><p id="kpi-gastos" class="text-sm font-semibold text-red-500"></p></div>
           </div>
-          <div class="border border-slate-100 rounded-xl p-4 flex items-center gap-3">
-            <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">💵</div>
-            <div><p class="text-slate-500 text-xs">Utilidad Neta Real</p><p id="kpi-utilidad" class="text-lg font-semibold text-emerald-500"></p></div>
+          <div class="border border-slate-100 rounded-lg p-2 flex items-center gap-2">
+            <div class="w-7 h-7 shrink-0 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm">💵</div>
+            <div><p class="text-slate-500 text-[10px] leading-tight">Utilidad Neta Real</p><p id="kpi-utilidad" class="text-sm font-semibold text-emerald-500"></p></div>
           </div>
         </div>
-        <div class="grid sm:grid-cols-2 gap-4 border-t border-slate-100 pt-4">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">📈</div>
-            <div><p class="text-slate-500 text-sm">Margen de Ganancia</p><p id="kpi-margen" class="text-xl font-bold text-emerald-500"></p></div>
+        <div class="grid sm:grid-cols-2 gap-2 border-t border-slate-100 pt-2">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 shrink-0 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm">📈</div>
+            <div><p class="text-slate-500 text-xs">Margen de Ganancia</p><p id="kpi-margen" class="text-base font-bold text-emerald-500"></p></div>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 shrink-0 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">⚖️</div>
-            <div><p class="text-slate-500 text-sm">Punto de Equilibrio</p><p id="kpi-break-even" class="text-xl font-bold text-indigo-600"></p></div>
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 shrink-0 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm">⚖️</div>
+            <div><p class="text-slate-500 text-xs">Punto de Equilibrio</p><p id="kpi-break-even" class="text-base font-bold text-indigo-600"></p></div>
           </div>
         </div>
       </div>
 
-      <div class="grid lg:grid-cols-2 gap-4">
-        <div class="bg-white border border-slate-200 rounded-xl p-4">
-          <h2 class="font-semibold mb-2">Distribución de Costos</h2>
-          <div class="flex flex-col sm:flex-row items-center gap-4">
-            <div class="relative w-full max-w-[140px] shrink-0">
+      <div class="grid lg:grid-cols-2 gap-3">
+        <div class="bg-white border border-slate-200 rounded-xl p-3">
+          <h2 class="font-semibold mb-1 text-sm">Distribución de Costos</h2>
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <div class="relative w-full h-[110px] max-w-[110px] shrink-0">
               <canvas id="chart-doughnut"></canvas>
               <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-2">
-                <span id="doughnut-total" class="text-sm font-bold text-slate-900 text-center leading-tight"></span>
-                <span class="text-[10px] text-slate-500">Ingreso Bruto</span>
+                <span id="doughnut-total" class="text-xs font-bold text-slate-900 text-center leading-tight"></span>
+                <span class="text-[9px] text-slate-500">Ingreso Bruto</span>
               </div>
             </div>
-            <ul id="doughnut-legend" class="flex-1 min-w-0 text-sm space-y-2"></ul>
+            <ul id="doughnut-legend" class="flex-1 min-w-0 text-xs space-y-1"></ul>
           </div>
         </div>
-        <div class="bg-white border border-slate-200 rounded-xl p-4">
-          <h2 class="font-semibold mb-2">Noches Ocupadas vs. Utilidad Neta</h2>
-          <canvas id="chart-bar"></canvas>
+        <div class="bg-white border border-slate-200 rounded-xl p-3">
+          <h2 class="font-semibold mb-1 text-sm">Noches Ocupadas vs. Utilidad Neta</h2>
+          <div class="relative w-full h-[140px]"><canvas id="chart-bar"></canvas></div>
         </div>
       </div>
 
-      <div class="bg-white border border-slate-200 rounded-xl p-4">
-        <div class="flex flex-wrap gap-3">
-          <button id="btn-toggle-formulas" type="button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full px-4 py-2 font-semibold text-sm">🧮 Ver fórmulas y valores usados</button>
-          <span class="flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-4 py-2 text-sm font-medium">✅ Validar cálculos</span>
+      <div class="bg-white border border-slate-200 rounded-xl p-3">
+        <div class="flex flex-wrap gap-2">
+          <button id="btn-toggle-formulas" type="button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full px-3 py-1.5 font-semibold text-xs">🧮 Ver fórmulas y valores usados</button>
+          <span class="flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-3 py-1.5 text-xs font-medium">✅ Validar cálculos</span>
         </div>
         <div id="formulas-panel" class="hidden mt-4 space-y-4 text-sm">
           <div class="border-t border-slate-200 pt-3 first:border-0 first:pt-0">
@@ -505,7 +506,7 @@
     </div>
   </div>
 
-  <footer class="print:hidden max-w-6xl mx-auto px-6 py-6 text-center text-xs text-slate-500">
+  <footer class="print:hidden max-w-6xl mx-auto px-6 py-2 text-center text-[11px] text-slate-500">
     Creado por Byron Lima · Instagram
     <a href="https://instagram.com/math3son" target="_blank" rel="noopener" class="text-emerald-500 hover:underline">@math3son</a>
     · 0989452132 · Código en

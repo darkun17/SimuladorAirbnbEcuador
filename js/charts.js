@@ -78,7 +78,7 @@ window.Sim = window.Sim || {};
     doughnutChart = new window.Chart(canvas, {
       type: 'doughnut',
       data,
-      options: { cutout: '68%', plugins: { legend: { display: false } } },
+      options: { cutout: '68%', maintainAspectRatio: false, plugins: { legend: { display: false } } },
     });
     return doughnutChart;
   }
@@ -114,6 +114,7 @@ window.Sim = window.Sim || {};
       type: 'line',
       data,
       options: {
+        maintainAspectRatio: false,
         scales: { x: { title: { display: true, text: 'Noches Ocupadas al Mes' } } },
         plugins: { legend: { display: false }, breakEvenLine: breakEvenLineConfig },
       },
