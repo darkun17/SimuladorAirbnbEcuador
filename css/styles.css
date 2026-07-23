@@ -1,0 +1,14 @@
+/* Ajustes finos que Tailwind CDN no cubre */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #64748B;
+  border-radius: 9999px;
+}
+input[type='range'] {
+  accent-color: #10B981;
+}
+.transition-panel {
+  transition: opacity 150ms ease-in-out;
+}
