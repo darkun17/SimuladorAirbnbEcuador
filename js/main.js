@@ -29,7 +29,18 @@
     el.classList.remove('hidden');
   }
 
+  function bindManualModal() {
+    const modal = document.getElementById('modal-manual');
+    document.getElementById('btn-manual').addEventListener('click', () => modal.classList.remove('hidden'));
+    document.getElementById('btn-cerrar-manual').addEventListener('click', () => modal.classList.add('hidden'));
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) modal.classList.add('hidden');
+    });
+  }
+
   function showApp() {
+    document.getElementById('intro-info').classList.add('hidden');
+    document.getElementById('btn-manual').classList.remove('hidden');
     document.getElementById('welcome-screen').classList.add('hidden');
     document.getElementById('resume-screen').classList.add('hidden');
     document.getElementById('app-screen').classList.remove('hidden');
@@ -80,6 +91,8 @@
   }
 
   async function init() {
+    bindManualModal();
+
     if (!isFileSystemAccessSupported()) {
       document.getElementById('unsupported-screen').classList.remove('hidden');
       return;

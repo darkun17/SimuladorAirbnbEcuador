@@ -10,14 +10,22 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
-  <header class="bg-slate-900 text-white px-6 py-4">
-    <h1 class="text-xl font-semibold">Simulador Financiero — Airbnb Ecuador</h1>
+  <header class="bg-slate-900 text-white px-4 sm:px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 shrink-0 rounded-lg bg-emerald-500 flex items-center justify-center text-lg">🏠</div>
+      <h1 class="text-base sm:text-xl font-semibold">Simulador Financiero — Airbnb Ecuador</h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <p class="hidden lg:block text-xs text-slate-400">Descubre cuánto podrías ganar con tu propiedad</p>
+      <button id="btn-manual" class="hidden bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg px-3 py-2 font-medium whitespace-nowrap">📖 Manual de uso</button>
+    </div>
   </header>
 
   <div id="error-banner" class="hidden bg-red-500 text-white px-6 py-3"></div>
 
-  <main class="max-w-6xl mx-auto p-6">
-    <section class="bg-white border border-slate-200 rounded-xl p-6 mb-6 space-y-4">
+  <div id="modal-manual" class="hidden fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-4 relative">
+      <button id="btn-cerrar-manual" class="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-xl leading-none">×</button>
       <div>
         <h2 class="font-semibold mb-1">¿Qué es esto?</h2>
         <p class="text-sm text-slate-500">
@@ -45,26 +53,102 @@
           <a href="https://github.com/darkun17/SimuladorAirbnbEcuador" target="_blank" rel="noopener" class="text-emerald-500 hover:underline font-medium">github.com/darkun17/SimuladorAirbnbEcuador</a>
         </p>
       </div>
+    </div>
+  </div>
+
+  <main class="max-w-6xl mx-auto p-6">
+    <section id="intro-info" class="bg-white border border-slate-200 rounded-xl overflow-hidden mb-6">
+      <div class="grid lg:grid-cols-2">
+        <div class="relative pb-10 sm:pb-12">
+          <div class="bg-gradient-to-br from-emerald-500 to-slate-900 min-h-[180px] sm:min-h-[220px] flex items-center justify-center text-7xl">
+            🏠
+          </div>
+          <div class="relative z-10 -mt-8 mx-4 sm:mx-6 bg-white rounded-xl border border-slate-200 shadow-sm p-4 space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 flex items-center justify-center text-lg">💰</div>
+              <h3 class="font-semibold text-sm">Calcula tu potencial de ingresos</h3>
+            </div>
+            <p class="text-xs text-slate-500">Ingresa tus costos y descubre la tarifa ideal para maximizar tus ganancias.</p>
+            <div class="flex justify-around pt-2 border-t border-slate-100 text-xs text-slate-500">
+              <div class="text-center"><div class="text-base">✅</div>Fácil</div>
+              <div class="text-center"><div class="text-base">⚡</div>Rápido</div>
+              <div class="text-center"><div class="text-base">🛡️</div>Confiable</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 pt-10 lg:pt-6 space-y-4">
+          <div>
+            <div class="flex items-center gap-3 mb-1">
+              <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 flex items-center justify-center text-base">💡</div>
+              <h2 class="font-semibold">¿Qué es esto?</h2>
+            </div>
+            <p class="text-sm text-slate-500">
+              Una calculadora para anfitriones de Airbnb en Ecuador. Ingresas tus costos fijos y directos, y el
+              simulador te dice qué tarifa publicar por noche para cubrir tus gastos y alcanzar la utilidad que
+              quieres — descontando ya la comisión de Airbnb (15.5%) y el IVA (15%). También te muestra tarifas
+              para feriados, temporada alta, huéspedes adicionales, y hasta qué punto puedes dar descuentos sin
+              perder rentabilidad.
+            </p>
+          </div>
+          <div class="border-t border-slate-100 pt-4">
+            <div class="flex items-center gap-3 mb-1">
+              <div class="w-9 h-9 shrink-0 rounded-full bg-blue-100 flex items-center justify-center text-base">📋</div>
+              <h2 class="font-semibold">Cómo usarlo</h2>
+            </div>
+            <ol class="text-sm text-slate-500 list-decimal list-inside space-y-1">
+              <li>Abre este archivo (<code class="bg-slate-100 px-1 rounded">index.html</code>) con doble clic en <strong>Google Chrome</strong> o <strong>Microsoft Edge</strong>.</li>
+              <li>La primera vez, elige "Crear nuevo simulador.db" y guarda el archivo donde quieras — recomendado, la misma carpeta del proyecto.</li>
+              <li>Completa los 3 pasos del formulario (Costos, Configuración, Estacionalidad). Todo se guarda solo en ese archivo mientras escribes.</li>
+              <li>Revisa el panel "Ver fórmulas y valores usados" al final del dashboard para validar cada cálculo.</li>
+              <li>La próxima vez que abras <code class="bg-slate-100 px-1 rounded">index.html</code>, tus datos se cargan automáticamente desde el mismo archivo.</li>
+            </ol>
+          </div>
+          <div class="border-t border-slate-100 pt-4">
+            <div class="flex items-center gap-3 mb-1">
+              <div class="w-9 h-9 shrink-0 rounded-full bg-purple-100 flex items-center justify-center text-base">💻</div>
+              <h2 class="font-semibold">Código fuente y colaboración</h2>
+            </div>
+            <p class="text-sm text-slate-500">
+              El proyecto es de código abierto. Puedes descargarlo, revisarlo o contribuir aquí:
+              <a href="https://github.com/darkun17/SimuladorAirbnbEcuador" target="_blank" rel="noopener" class="text-emerald-500 hover:underline font-medium">github.com/darkun17/SimuladorAirbnbEcuador</a>
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="unsupported-screen" class="hidden bg-white border border-slate-200 rounded-xl p-8 text-center">
       <p class="text-red-500 font-semibold">Este simulador requiere Google Chrome o Microsoft Edge para guardar tus datos en un archivo.</p>
     </section>
 
-    <section id="welcome-screen" class="hidden bg-white border border-slate-200 rounded-xl p-8 text-center space-y-4">
-      <p class="text-slate-500">Elige cómo empezar:</p>
-      <div class="flex justify-center gap-4">
-        <button id="btn-crear-nuevo" class="bg-emerald-500 text-white rounded-xl px-5 py-3 font-medium">✨ Crear nuevo simulador.db</button>
-        <button id="btn-abrir-existente" class="bg-slate-900 text-white rounded-xl px-5 py-3 font-medium">📂 Abrir simulador.db existente</button>
+    <section id="welcome-screen" class="hidden bg-white border border-slate-200 rounded-xl p-6 sm:p-8">
+      <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 text-center sm:text-left">
+        <div class="text-6xl shrink-0">📊</div>
+        <div class="flex-1">
+          <h2 class="font-semibold text-lg mb-1">¿Listo para conocer el potencial de tu propiedad?</h2>
+          <p class="text-sm text-slate-500 mb-4">Elige cómo empezar — tus datos se guardan solos en un archivo en tu computadora.</p>
+          <div class="flex flex-wrap justify-center sm:justify-start gap-3">
+            <button id="btn-crear-nuevo" class="bg-emerald-500 text-white rounded-xl px-5 py-3 font-medium">✨ Crear nuevo simulador.db</button>
+            <button id="btn-abrir-existente" class="bg-slate-900 text-white rounded-xl px-5 py-3 font-medium">📂 Abrir simulador.db existente</button>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="resume-screen" class="hidden bg-white border border-slate-200 rounded-xl p-8 text-center">
-      <button id="btn-continuar" class="bg-emerald-500 text-white rounded-xl px-5 py-3 font-medium">▶ Continuar con simulador.db</button>
+    <section id="resume-screen" class="hidden bg-white border border-slate-200 rounded-xl p-6 sm:p-8">
+      <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 text-center sm:text-left">
+        <div class="text-6xl shrink-0">📊</div>
+        <div class="flex-1">
+          <h2 class="font-semibold text-lg mb-1">¿Listo para conocer el potencial de tu propiedad?</h2>
+          <p class="text-sm text-slate-500 mb-4">Inicia el simulador y toma decisiones inteligentes basadas en datos reales.</p>
+          <button id="btn-continuar" class="bg-emerald-500 text-white rounded-xl px-5 py-3 font-medium">▶ Continuar con simulador.db</button>
+        </div>
+      </div>
     </section>
 
     <section id="app-screen" class="hidden space-y-6">
-      <nav class="flex gap-2">
+      <nav class="flex flex-wrap gap-2">
         <button data-step-tab="costos" class="rounded-xl px-4 py-2 font-medium bg-white border border-slate-200">1. Costos</button>
         <button data-step-tab="configuracion" class="rounded-xl px-4 py-2 font-medium bg-white border border-slate-200">2. Configuración</button>
         <button data-step-tab="estacionalidad" class="rounded-xl px-4 py-2 font-medium bg-white border border-slate-200">3. Estacionalidad</button>
@@ -150,9 +234,10 @@
           <label class="block text-sm text-slate-500">Factor de incremento temporada alta (%)</label>
           <input data-field="estacionalidad.factorIncrementoTemporadaAlta" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
         </div>
-        <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2">
+        <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2 min-w-0">
           <h2 class="font-semibold">Feriados y Fiestas Locales</h2>
-          <table id="tabla-feriados" class="w-full text-sm">
+          <div class="overflow-x-auto">
+          <table id="tabla-feriados" class="w-full text-sm min-w-[560px]">
             <thead>
               <tr class="text-slate-500 text-left">
                 <th class="px-3 py-2">Nombre</th>
@@ -163,6 +248,7 @@
             </thead>
             <tbody></tbody>
           </table>
+          </div>
           <button id="btn-agregar-feriado" type="button" class="text-emerald-500 font-medium">+ Agregar fiesta local</button>
         </div>
       </div>
