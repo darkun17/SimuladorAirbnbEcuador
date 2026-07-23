@@ -134,6 +134,7 @@ window.Sim = window.Sim || {};
     root.querySelector('#kpi-noches-ocupadas').textContent = `${state.simulacion.nochesOcupadasMes} noches`;
     root.querySelector('#kpi-ingreso-bruto').textContent = fmt.format(results.proyeccion.ingresoBrutoRecaudado);
     root.querySelector('#kpi-comision').textContent = fmt.format(results.proyeccion.comisionTotal);
+    root.querySelector('#kpi-deposito-airbnb').textContent = fmt.format(results.proyeccion.gananciaAirbnbTotal);
     root.querySelector('#kpi-iva').textContent = fmt.format(results.proyeccion.ivaTotal);
     root.querySelector('#kpi-gastos').textContent = fmt.format(results.proyeccion.gastosOperativosTotales);
     root.querySelector('#kpi-utilidad').textContent = fmt.format(results.proyeccion.utilidadNeta);
@@ -175,8 +176,11 @@ window.Sim = window.Sim || {};
     root.querySelector('#formula-comision').textContent =
       `= ${fmt.format(results.tarifa.precioFinal)} × 0.155 = ${fmt.format(results.tarifa.comisionAirbnb)}`;
 
+    root.querySelector('#formula-deposito-airbnb').textContent =
+      `= ${fmt.format(results.tarifa.precioFinal)} − ${fmt.format(results.tarifa.comisionAirbnb)} = ${fmt.format(results.tarifa.gananciaAirbnb)} (esto es lo que verás como "Ganas" en Airbnb)`;
+
     root.querySelector('#formula-precio-final').textContent =
-      `= ${fmt.format(results.tarifa.precioFinal)} − ${fmt.format(results.tarifa.comisionAirbnb)} − ${fmt.format(results.tarifa.montoIVA)} = ${fmt.format(results.tarifa.ingresoNetoRecibido)}`;
+      `= ${fmt.format(results.tarifa.gananciaAirbnb)} − ${fmt.format(results.tarifa.montoIVA)} = ${fmt.format(results.tarifa.ingresoNetoRecibido)}`;
 
     root.querySelector('#formula-feriado').textContent =
       `= ${fmt.format(results.tarifa.precioFinal)} × (1 + ${estacionalidad.factorIncrementoTemporadaAlta}%) = ${fmt.format(results.tarifaFeriado.precioFinal)} al huésped ` +

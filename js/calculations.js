@@ -36,9 +36,12 @@
     const ingresoNetoNecesario = utilidadDeseada + costoFijoDiario + costoDirecto / noches;
     const precioFinal = ingresoNetoNecesario / (1 - AIRBNB_COMISION - IVA_ECUADOR);
     const comisionAirbnb = precioFinal * AIRBNB_COMISION;
+    // Lo que Airbnb realmente deposita al anfitrión (su "Ganas"): el IVA no
+    // lo retiene Airbnb, es una obligación tributaria aparte del anfitrión.
+    const gananciaAirbnb = precioFinal - comisionAirbnb;
     const montoIVA = precioFinal * IVA_ECUADOR;
-    const ingresoNetoRecibido = precioFinal - comisionAirbnb - montoIVA;
-    return { ingresoNetoNecesario, precioFinal, comisionAirbnb, montoIVA, ingresoNetoRecibido };
+    const ingresoNetoRecibido = gananciaAirbnb - montoIVA;
+    return { ingresoNetoNecesario, precioFinal, comisionAirbnb, gananciaAirbnb, montoIVA, ingresoNetoRecibido };
   }
 
   function calcTarifaPersonaAdicional(precioFinal, huespedesReales, capacidadBase, costoHuespedExtra) {
@@ -64,6 +67,7 @@
     const reservas = nochesOcupadas / noches;
     const ingresoBrutoRecaudado = precioFinal * nochesOcupadas;
     const comisionTotal = ingresoBrutoRecaudado * AIRBNB_COMISION;
+    const gananciaAirbnbTotal = ingresoBrutoRecaudado - comisionTotal;
     const ivaTotal = ingresoBrutoRecaudado * IVA_ECUADOR;
     const gastosDirectosTotales = costoDirectoPorReserva * reservas;
     const gastosFijosTotales = costosFijosMensuales;
@@ -73,6 +77,7 @@
     return {
       ingresoBrutoRecaudado,
       comisionTotal,
+      gananciaAirbnbTotal,
       ivaTotal,
       gastosFijosTotales,
       gastosDirectosTotales,

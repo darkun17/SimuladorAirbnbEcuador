@@ -179,7 +179,8 @@
         <div class="grid md:grid-cols-3 gap-4 text-sm">
           <div><p class="text-slate-500">Ingreso Bruto Recaudado</p><p id="kpi-ingreso-bruto" class="text-lg font-semibold"></p></div>
           <div><p class="text-slate-500">Comisión Airbnb (15.5%)</p><p id="kpi-comision" class="text-lg font-semibold text-red-500"></p></div>
-          <div><p class="text-slate-500">IVA (15%)</p><p id="kpi-iva" class="text-lg font-semibold text-red-500"></p></div>
+          <div><p class="text-slate-500">Depósito de Airbnb ("Ganas")</p><p id="kpi-deposito-airbnb" class="text-lg font-semibold"></p></div>
+          <div><p class="text-slate-500">IVA (15%, obligación aparte)</p><p id="kpi-iva" class="text-lg font-semibold text-red-500"></p></div>
           <div><p class="text-slate-500">Gastos Operativos Totales</p><p id="kpi-gastos" class="text-lg font-semibold text-red-500"></p></div>
           <div><p class="text-slate-500">Utilidad Neta Real</p><p id="kpi-utilidad" class="text-lg font-semibold text-emerald-500"></p></div>
           <div><p class="text-slate-500">Margen de Ganancia</p><p id="kpi-margen" class="text-lg font-semibold text-emerald-500"></p></div>
@@ -217,19 +218,23 @@
             <p id="formula-ingreso-neto" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Precio Final a Publicar = Ingreso Neto Necesario / (1 − 0.155 − 0.15). Comisión (15.5%) e IVA (15%) se calculan ambos directo sobre este precio — el que paga el huésped.</p>
+            <p class="text-slate-500">Precio Final a Publicar = Ingreso Neto Necesario / (1 − 0.155 − 0.15). Este es el precio que ve y paga el huésped.</p>
             <p id="formula-precio-base" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Monto IVA (15%) = Precio Final × 0.15</p>
-            <p id="formula-iva" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Comisión Airbnb Retenida (15.5%) = Precio Final × 0.155</p>
+            <p class="text-slate-500">Comisión Airbnb Retenida (15.5%) = Precio Final × 0.155 — esto SÍ lo descuenta Airbnb directamente de tu pago</p>
             <p id="formula-comision" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Ingreso Neto que Recibe el Anfitrión = Precio Final − Comisión − IVA (verificación: debe coincidir con el Ingreso Neto Necesario)</p>
+            <p class="text-slate-500">Depósito de Airbnb ("Ganas") = Precio Final − Comisión</p>
+            <p id="formula-deposito-airbnb" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Monto IVA (15%) = Precio Final × 0.15 — esto es tu obligación tributaria aparte; Airbnb NO la retiene ni la muestra en tu pago, pero igual sale de tu bolsillo</p>
+            <p id="formula-iva" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Ingreso Neto que Recibe el Anfitrión = Depósito de Airbnb − IVA (verificación: debe coincidir con el Ingreso Neto Necesario)</p>
             <p id="formula-precio-final" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">

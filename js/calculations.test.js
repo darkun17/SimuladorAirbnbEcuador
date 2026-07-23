@@ -60,6 +60,20 @@ test('calcTarifaInversa solves for the guest-facing price from a 69.5% net reten
   assert.ok(Math.abs(result.montoIVA - result.precioFinal * 0.15) < 1e-9);
   // lo que recibe el anfitrión debe reconstruir el ingreso neto necesario
   assert.ok(Math.abs(result.ingresoNetoRecibido - result.ingresoNetoNecesario) < 1e-9);
+  // lo que deposita Airbnb (antes del IVA, que Airbnb no retiene) = precioFinal - comision
+  assert.ok(Math.abs(result.gananciaAirbnb - (result.precioFinal - result.comisionAirbnb)) < 1e-9);
+});
+
+// Caso real verificado contra el CSV de transacciones de Airbnb del usuario
+// (reserva HMZXNC4M44, 3 noches): Airbnb solo retiene la comisión del 15.5%
+// del monto bruto — el IVA no aparece en absoluto en ese descuento.
+test('calcTarifaInversa matches a real Airbnb payout: comisión = 15.5% del bruto, IVA aparte', () => {
+  const precioFinal = 226.5; // "Ingresos brutos" del CSV
+  const comisionEsperada = 35.11; // "Tarifa de servicio" del CSV (redondeado)
+  const gananciaEsperada = 191.39; // "Monto" / "Ganas" del CSV
+  const comisionAirbnb = precioFinal * AIRBNB_COMISION;
+  assert.ok(Math.abs(comisionAirbnb - comisionEsperada) < 0.01);
+  assert.ok(Math.abs(precioFinal - comisionAirbnb - gananciaEsperada) < 0.01);
 });
 
 test('calcTarifaInversa guards against promedioNochesPorReserva of 0', () => {
@@ -113,6 +127,8 @@ test('calcProyeccionMensual computes monthly KPIs directly off Ingreso Bruto Rec
   assert.equal(result.ingresoBrutoRecaudado, 1000);
   assert.equal(result.comisionTotal, 1000 * 0.155);
   assert.equal(result.ivaTotal, 1000 * 0.15);
+  // lo que efectivamente deposita Airbnb (el IVA no lo retiene Airbnb)
+  assert.equal(result.gananciaAirbnbTotal, 1000 - 1000 * 0.155);
   assert.equal(result.gastosDirectosTotales, 100);
   assert.equal(result.gastosFijosTotales, 300);
   assert.equal(result.gastosOperativosTotales, 400);
