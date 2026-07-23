@@ -1,7 +1,7 @@
 // js/state.test.js
-import { test } from 'node:test';
-import assert from 'node:assert/strict';
-import { createDefaultState, sanitizeNumber, mergeState } from './state.js';
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const { createDefaultState, sanitizeNumber, mergeState } = require('./state.js');
 
 test('createDefaultState returns a fresh object with all required sections', () => {
   const state = createDefaultState();

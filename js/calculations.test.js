@@ -1,7 +1,7 @@
 // js/calculations.test.js
-import { test } from 'node:test';
-import assert from 'node:assert/strict';
-import {
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const {
   AIRBNB_COMISION,
   IVA_ECUADOR,
   DIAS_MES,
@@ -14,7 +14,7 @@ import {
   calcMargenContribucionPorNoche,
   calcProyeccionMensual,
   calcPuntoEquilibrio,
-} from './calculations.js';
+} = require('./calculations.js');
 
 test('constants match Ecuador Airbnb rules', () => {
   assert.equal(AIRBNB_COMISION, 0.155);

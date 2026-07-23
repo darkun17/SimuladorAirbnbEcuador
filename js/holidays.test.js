@@ -1,7 +1,7 @@
 // js/holidays.test.js
-import { test } from 'node:test';
-import assert from 'node:assert/strict';
-import { CIUDADES_ECUADOR, getFeriadosNacionales2026, crearFeriadoLocal } from './holidays.js';
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const { CIUDADES_ECUADOR, getFeriadosNacionales2026, crearFeriadoLocal } = require('./holidays.js');
 
 test('CIUDADES_ECUADOR includes the main host cities', () => {
   for (const ciudad of ['Loja', 'Quito', 'Guayaquil', 'Cuenca', 'Salinas']) {
