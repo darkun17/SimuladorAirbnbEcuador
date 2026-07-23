@@ -170,7 +170,7 @@ window.Sim = window.Sim || {};
         const pct = total > 0 ? (item.value / total) * 100 : 0;
         return `<li class="flex items-center justify-between gap-2">
           <span class="flex items-center gap-1.5 min-w-0 text-slate-700"><span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${item.color}"></span><span class="truncate">${item.label}</span></span>
-          <span class="text-slate-500 text-xs shrink-0">${fmt.format(item.value)} · ${pct.toFixed(1)}%</span>
+          <span class="text-slate-500 text-sm shrink-0">${fmt.format(item.value)} · ${pct.toFixed(1)}%</span>
         </li>`;
       })
       .join('');
