@@ -17,6 +17,36 @@
   <div id="error-banner" class="hidden bg-red-500 text-white px-6 py-3"></div>
 
   <main class="max-w-6xl mx-auto p-6">
+    <section class="bg-white border border-slate-200 rounded-xl p-6 mb-6 space-y-4">
+      <div>
+        <h2 class="font-semibold mb-1">¿Qué es esto?</h2>
+        <p class="text-sm text-slate-500">
+          Una calculadora para anfitriones de Airbnb en Ecuador. Ingresas tus costos fijos y directos, y el
+          simulador te dice qué tarifa publicar por noche para cubrir tus gastos y alcanzar la utilidad que
+          quieres — descontando ya la comisión de Airbnb (15.5%) y el IVA (15%). También te muestra tarifas
+          para feriados, temporada alta, huéspedes adicionales, y hasta qué punto puedes dar descuentos sin
+          perder rentabilidad.
+        </p>
+      </div>
+      <div>
+        <h2 class="font-semibold mb-1">Cómo usarlo</h2>
+        <ol class="text-sm text-slate-500 list-decimal list-inside space-y-1">
+          <li>Abre este archivo (<code class="bg-slate-100 px-1 rounded">index.html</code>) con doble clic en <strong>Google Chrome</strong> o <strong>Microsoft Edge</strong>.</li>
+          <li>La primera vez, elige "Crear nuevo simulador.db" y guarda el archivo donde quieras — recomendado, la misma carpeta del proyecto.</li>
+          <li>Completa los 3 pasos del formulario (Costos, Configuración, Estacionalidad). Todo se guarda solo en ese archivo mientras escribes.</li>
+          <li>Revisa el panel "Ver fórmulas y valores usados" al final del dashboard para validar cada cálculo.</li>
+          <li>La próxima vez que abras <code class="bg-slate-100 px-1 rounded">index.html</code>, tus datos se cargan automáticamente desde el mismo archivo.</li>
+        </ol>
+      </div>
+      <div>
+        <h2 class="font-semibold mb-1">Código fuente y colaboración</h2>
+        <p class="text-sm text-slate-500">
+          El proyecto es de código abierto. Puedes descargarlo, revisarlo o contribuir aquí:
+          <a href="https://github.com/darkun17/SimuladorAirbnbEcuador" target="_blank" rel="noopener" class="text-emerald-500 hover:underline font-medium">github.com/darkun17/SimuladorAirbnbEcuador</a>
+        </p>
+      </div>
+    </section>
+
     <section id="unsupported-screen" class="hidden bg-white border border-slate-200 rounded-xl p-8 text-center">
       <p class="text-red-500 font-semibold">Este simulador requiere Google Chrome o Microsoft Edge para guardar tus datos en un archivo.</p>
     </section>
@@ -275,7 +305,8 @@
   <footer class="max-w-6xl mx-auto px-6 py-6 text-center text-xs text-slate-500">
     Creado por Byron Lima · Instagram
     <a href="https://instagram.com/math3son" target="_blank" rel="noopener" class="text-emerald-500 hover:underline">@math3son</a>
-    · 0989452132
+    · 0989452132 · Código en
+    <a href="https://github.com/darkun17/SimuladorAirbnbEcuador" target="_blank" rel="noopener" class="text-emerald-500 hover:underline">GitHub</a>
   </footer>
 
   <script src="js/holidays.js"></script>
