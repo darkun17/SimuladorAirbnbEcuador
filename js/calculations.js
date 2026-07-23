@@ -84,6 +84,22 @@
     return Math.ceil(costosFijosMensuales / margenContribucionPorNoche);
   }
 
+  function calcTarifaPersonaAdicionalRecomendada(precioBase, capacidadBase, porcentaje) {
+    if (capacidadBase <= 0) return 0;
+    return (precioBase / capacidadBase) * (porcentaje / 100);
+  }
+
+  function calcDescuentoMaximo(tarifaBase, precioMinimoRentable) {
+    if (tarifaBase <= 0) return 0;
+    return ((tarifaBase - precioMinimoRentable) / tarifaBase) * 100;
+  }
+
+  function calcNochesMinimasRentables(costoDirectoPorReserva, precioBase, comisionAirbnb, costoFijoDiario) {
+    const margenPorNocheConFijos = precioBase - comisionAirbnb - costoFijoDiario;
+    if (margenPorNocheConFijos <= 0) return Infinity;
+    return Math.ceil(costoDirectoPorReserva / margenPorNocheConFijos);
+  }
+
   const api = {
     AIRBNB_COMISION,
     IVA_ECUADOR,
@@ -97,6 +113,9 @@
     calcMargenContribucionPorNoche,
     calcProyeccionMensual,
     calcPuntoEquilibrio,
+    calcTarifaPersonaAdicionalRecomendada,
+    calcDescuentoMaximo,
+    calcNochesMinimasRentables,
   };
 
   if (typeof module !== 'undefined' && module.exports) {

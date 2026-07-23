@@ -1,7 +1,7 @@
 // js/main.js
 (function () {
   const { createDefaultState, mergeState } = window.Sim.state;
-  const { bindStepForm, bindStepNavigation, renderDashboard, renderFeriados, bindFormulasToggle } = window.Sim.ui;
+  const { bindStepForm, syncStepForm, bindStepNavigation, renderDashboard, renderFeriados, bindFormulasToggle } = window.Sim.ui;
   const {
     isFileSystemAccessSupported,
     createNewFile,
@@ -37,20 +37,19 @@
     bindStepNavigation(root);
     bindFormulasToggle(root);
 
-    function render() {
-      renderDashboard(root, state);
-      renderFeriados(root, state.estacionalidad.feriados, (feriados) => {
-        state = mergeState(state, { estacionalidad: { feriados } });
-        render();
-        scheduleSave();
-      });
-    }
-
-    bindStepForm(root, state, (patch) => {
+    function onStateChange(patch) {
       state = mergeState(state, patch);
       render();
       scheduleSave();
-    });
+    }
+
+    function render() {
+      syncStepForm(root, state);
+      renderDashboard(root, state, onStateChange);
+      renderFeriados(root, state.estacionalidad.feriados, (feriados) => onStateChange({ estacionalidad: { feriados } }));
+    }
+
+    bindStepForm(root, state, onStateChange);
     render();
   }
 

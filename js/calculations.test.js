@@ -14,6 +14,9 @@ const {
   calcMargenContribucionPorNoche,
   calcProyeccionMensual,
   calcPuntoEquilibrio,
+  calcTarifaPersonaAdicionalRecomendada,
+  calcDescuentoMaximo,
+  calcNochesMinimasRentables,
 } = require('./calculations.js');
 
 test('constants match Ecuador Airbnb rules', () => {
@@ -137,4 +140,32 @@ test('calcPuntoEquilibrio returns nights needed to cover fixed costs', () => {
 test('calcPuntoEquilibrio returns Infinity when contribution margin is not positive', () => {
   assert.equal(calcPuntoEquilibrio(300, 0), Infinity);
   assert.equal(calcPuntoEquilibrio(300, -5), Infinity);
+});
+
+test('calcTarifaPersonaAdicionalRecomendada suggests a percentage of the per-guest base rate', () => {
+  // precioBase 60, capacidadBase 3 -> per-guest = 20, 50% of that = 10
+  assert.equal(calcTarifaPersonaAdicionalRecomendada(60, 3, 50), 10);
+});
+
+test('calcTarifaPersonaAdicionalRecomendada returns 0 when capacidadBase is not positive', () => {
+  assert.equal(calcTarifaPersonaAdicionalRecomendada(60, 0, 50), 0);
+});
+
+test('calcDescuentoMaximo expresses the gap to the breakeven price as a percentage', () => {
+  // base 100, minimo rentable 80 -> 20% max discount
+  assert.equal(calcDescuentoMaximo(100, 80), 20);
+});
+
+test('calcDescuentoMaximo returns 0 when tarifaBase is not positive', () => {
+  assert.equal(calcDescuentoMaximo(0, 0), 0);
+});
+
+test('calcNochesMinimasRentables computes nights needed to absorb the per-booking direct cost', () => {
+  // precioBase 60, comision 9.3, costoFijoDiario 5 -> margen por noche = 45.7
+  // costoDirecto 100 -> ceil(100/45.7) = 3
+  assert.equal(calcNochesMinimasRentables(100, 60, 9.3, 5), Math.ceil(100 / 45.7));
+});
+
+test('calcNochesMinimasRentables returns Infinity when the nightly margin is not positive', () => {
+  assert.equal(calcNochesMinimasRentables(100, 10, 9, 5), Infinity);
 });

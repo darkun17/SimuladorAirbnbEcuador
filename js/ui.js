@@ -11,11 +11,15 @@ window.Sim = window.Sim || {};
     calcMargenContribucionPorNoche,
     calcProyeccionMensual,
     calcPuntoEquilibrio,
+    calcTarifaPersonaAdicionalRecomendada,
+    calcDescuentoMaximo,
+    calcNochesMinimasRentables,
     sumValues,
   } = window.Sim.calculations;
   const { crearFeriadoLocal } = window.Sim.holidays;
   const { sanitizeNumber } = window.Sim.state;
   const { renderDoughnutChart, renderBarChart } = window.Sim.charts;
+  const { PROVINCIAS_ECUADOR } = window.Sim.locations;
 
   const fmt = new Intl.NumberFormat('es-EC', { style: 'currency', currency: 'USD' });
 
@@ -43,6 +47,24 @@ window.Sim = window.Sim || {};
       promedioNochesPorReserva: state.simulacion.promedioNochesPorReserva,
     });
     const puntoEquilibrio = calcPuntoEquilibrio(costosFijosMensuales, margenContribucion);
+    const personaAdicionalRecomendada = calcTarifaPersonaAdicionalRecomendada(
+      tarifa.precioBase,
+      state.configuracion.capacidadBase,
+      state.configuracion.porcentajePersonaAdicional,
+    );
+    const precioMinimoRentable = calcTarifaInversa({
+      utilidadDeseada: 0,
+      costoFijoDiario,
+      costoDirecto: costoDirectoPorReserva,
+      promedioNochesPorReserva: state.simulacion.promedioNochesPorReserva,
+    }).precioBase;
+    const descuentoMaximo = calcDescuentoMaximo(tarifa.precioBase, precioMinimoRentable);
+    const nochesMinimasRentables = calcNochesMinimasRentables(
+      costoDirectoPorReserva,
+      tarifa.precioBase,
+      tarifa.comisionAirbnb,
+      costoFijoDiario,
+    );
     const proyeccion = calcProyeccionMensual(
       {
         precioBase: tarifa.precioBase,
@@ -65,7 +87,22 @@ window.Sim = window.Sim || {};
       );
       curvaUtilidad.push({ noches, utilidad: p.utilidadNeta });
     }
-    return { costoFijoDiario, costosFijosMensuales, costoDirectoPorReserva, tarifa, tarifaPersonaAdicional, tarifaFeriado, margenContribucion, puntoEquilibrio, proyeccion, curvaUtilidad };
+    return {
+      costoFijoDiario,
+      costosFijosMensuales,
+      costoDirectoPorReserva,
+      tarifa,
+      tarifaPersonaAdicional,
+      tarifaFeriado,
+      margenContribucion,
+      puntoEquilibrio,
+      personaAdicionalRecomendada,
+      precioMinimoRentable,
+      descuentoMaximo,
+      nochesMinimasRentables,
+      proyeccion,
+      curvaUtilidad,
+    };
   }
 
   function bindNumberInput(root, path, getValue, onChange) {
@@ -75,12 +112,22 @@ window.Sim = window.Sim || {};
     el.addEventListener('input', () => onChange(sanitizeNumber(el.value)));
   }
 
-  function renderDashboard(root, state) {
+  function renderDashboard(root, state, onStateChange) {
     const results = computeAll(state);
 
     root.querySelector('#kpi-tarifa-regular').textContent = fmt.format(results.tarifa.precioFinal);
     root.querySelector('#kpi-tarifa-feriado').textContent = fmt.format(results.tarifaFeriado.precioFinal);
-    root.querySelector('#kpi-tarifa-persona-extra').textContent = fmt.format(state.configuracion.costoHuespedExtra);
+    root.querySelector('#kpi-tarifa-persona-extra').textContent = fmt.format(results.personaAdicionalRecomendada);
+    const btnUsarRecomendacion = root.querySelector('#btn-usar-recomendacion-persona');
+    if (btnUsarRecomendacion && onStateChange) {
+      btnUsarRecomendacion.onclick = () =>
+        onStateChange({ configuracion: { costoHuespedExtra: results.personaAdicionalRecomendada } });
+    }
+
+    root.querySelector('#kpi-descuento-maximo').textContent = `${results.descuentoMaximo.toFixed(1)}%`;
+    root.querySelector('#kpi-precio-minimo').textContent = fmt.format(results.precioMinimoRentable);
+    root.querySelector('#kpi-noches-minimas').textContent =
+      results.nochesMinimasRentables === Infinity ? 'No alcanzable con esta tarifa' : `${results.nochesMinimasRentables} noches`;
 
     root.querySelector('#kpi-noches-ocupadas').textContent = `${state.simulacion.nochesOcupadasMes} noches`;
     root.querySelector('#kpi-ingreso-bruto').textContent = fmt.format(results.proyeccion.ingresoBrutoRecaudado);
@@ -145,6 +192,40 @@ window.Sim = window.Sim || {};
       results.puntoEquilibrio === Infinity
         ? `= ${fmt.format(results.costosFijosMensuales)} / ${fmt.format(results.margenContribucion)} → no alcanzable (el margen de contribución no es positivo)`
         : `= ${fmt.format(results.costosFijosMensuales)} / ${fmt.format(results.margenContribucion)} = ${results.puntoEquilibrio} noches/mes`;
+
+    root.querySelector('#formula-persona-recomendada').textContent =
+      `= (${fmt.format(results.tarifa.precioBase)} / ${configuracion.capacidadBase}) × (${configuracion.porcentajePersonaAdicional}% / 100) = ` +
+      `${fmt.format(results.tarifa.precioBase / (configuracion.capacidadBase || 1))} × ${configuracion.porcentajePersonaAdicional}% = ${fmt.format(results.personaAdicionalRecomendada)}`;
+
+    root.querySelector('#formula-precio-minimo').textContent =
+      `Precio Mínimo Rentable = Precio Base con Utilidad Deseada = $0 = ${fmt.format(results.precioMinimoRentable)}`;
+
+    root.querySelector('#formula-descuento-maximo').textContent =
+      `= ((${fmt.format(results.tarifa.precioBase)} − ${fmt.format(results.precioMinimoRentable)}) / ${fmt.format(results.tarifa.precioBase)}) × 100 = ${results.descuentoMaximo.toFixed(1)}%`;
+
+    root.querySelector('#formula-noches-minimas').textContent =
+      `Margen por Noche (con Costo Fijo) = ${fmt.format(results.tarifa.precioBase)} − ${fmt.format(results.tarifa.comisionAirbnb)} − ${fmt.format(results.costoFijoDiario)} = ${fmt.format(results.tarifa.precioBase - results.tarifa.comisionAirbnb - results.costoFijoDiario)}\n` +
+      (results.nochesMinimasRentables === Infinity
+        ? '→ no alcanzable (el margen por noche no es positivo)'
+        : `Noches Mínimas = ${fmt.format(results.costoDirectoPorReserva)} / ${fmt.format(results.tarifa.precioBase - results.tarifa.comisionAirbnb - results.costoFijoDiario)} = ${results.nochesMinimasRentables} noches`);
+  }
+
+  function populateCiudadSelect(root, ciudadActual) {
+    const select = root.querySelector('[data-field="estacionalidad.ciudad"]');
+    if (!select || select.dataset.populated === 'true') return;
+    select.innerHTML = '';
+    PROVINCIAS_ECUADOR.forEach(({ provincia, cantones }) => {
+      const group = document.createElement('optgroup');
+      group.label = provincia;
+      cantones.forEach((canton) => {
+        const option = document.createElement('option');
+        option.value = canton;
+        option.textContent = canton;
+        group.appendChild(option);
+      });
+      select.appendChild(group);
+    });
+    select.dataset.populated = 'true';
   }
 
   function bindFormulasToggle(root) {
@@ -189,35 +270,41 @@ window.Sim = window.Sim || {};
     };
   }
 
-  function bindStepForm(root, state, onStateChange) {
-    const fields = [
-      ['costosFijos.alicuota', () => state.costosFijos.alicuota, (v) => onStateChange({ costosFijos: { alicuota: v } })],
-      ['costosFijos.internet', () => state.costosFijos.internet, (v) => onStateChange({ costosFijos: { internet: v } })],
-      ['costosFijos.seguro', () => state.costosFijos.seguro, (v) => onStateChange({ costosFijos: { seguro: v } })],
-      ['costosFijos.agua', () => state.costosFijos.agua, (v) => onStateChange({ costosFijos: { agua: v } })],
-      ['costosFijos.luz', () => state.costosFijos.luz, (v) => onStateChange({ costosFijos: { luz: v } })],
-      ['costosFijos.otros', () => state.costosFijos.otros, (v) => onStateChange({ costosFijos: { otros: v } })],
-      ['costosDirectos.lavanderia', () => state.costosDirectos.lavanderia, (v) => onStateChange({ costosDirectos: { lavanderia: v } })],
-      ['costosDirectos.limpieza', () => state.costosDirectos.limpieza, (v) => onStateChange({ costosDirectos: { limpieza: v } })],
-      ['costosDirectos.amenities', () => state.costosDirectos.amenities, (v) => onStateChange({ costosDirectos: { amenities: v } })],
-      ['costosDirectos.suministrosCocina', () => state.costosDirectos.suministrosCocina, (v) => onStateChange({ costosDirectos: { suministrosCocina: v } })],
-      ['cortesias.aguaCostoUnitario', () => state.cortesias.aguaCostoUnitario, (v) => onStateChange({ cortesias: { aguaCostoUnitario: v } })],
-      ['cortesias.aguaCantidad', () => state.cortesias.aguaCantidad, (v) => onStateChange({ cortesias: { aguaCantidad: v } })],
-      ['cortesias.snacksCostoPorReserva', () => state.cortesias.snacksCostoPorReserva, (v) => onStateChange({ cortesias: { snacksCostoPorReserva: v } })],
-      ['configuracion.habitaciones', () => state.configuracion.habitaciones, (v) => onStateChange({ configuracion: { habitaciones: v } })],
-      ['configuracion.banos', () => state.configuracion.banos, (v) => onStateChange({ configuracion: { banos: v } })],
-      ['configuracion.capacidadBase', () => state.configuracion.capacidadBase, (v) => onStateChange({ configuracion: { capacidadBase: v } })],
-      ['configuracion.capacidadMaxima', () => state.configuracion.capacidadMaxima, (v) => onStateChange({ configuracion: { capacidadMaxima: v } })],
-      ['configuracion.costoHuespedExtra', () => state.configuracion.costoHuespedExtra, (v) => onStateChange({ configuracion: { costoHuespedExtra: v } })],
-      ['estacionalidad.factorIncrementoTemporadaAlta', () => state.estacionalidad.factorIncrementoTemporadaAlta, (v) => onStateChange({ estacionalidad: { factorIncrementoTemporadaAlta: v } })],
-      ['simulacion.utilidadDeseadaPorNoche', () => state.simulacion.utilidadDeseadaPorNoche, (v) => onStateChange({ simulacion: { utilidadDeseadaPorNoche: v } })],
-      ['simulacion.promedioNochesPorReserva', () => state.simulacion.promedioNochesPorReserva, (v) => onStateChange({ simulacion: { promedioNochesPorReserva: v } })],
-      ['simulacion.huespedesReales', () => state.simulacion.huespedesReales, (v) => onStateChange({ simulacion: { huespedesReales: v } })],
+  function getFieldPaths(state) {
+    return [
+      ['costosFijos.alicuota', () => state.costosFijos.alicuota, (v) => ({ costosFijos: { alicuota: v } })],
+      ['costosFijos.internet', () => state.costosFijos.internet, (v) => ({ costosFijos: { internet: v } })],
+      ['costosFijos.seguro', () => state.costosFijos.seguro, (v) => ({ costosFijos: { seguro: v } })],
+      ['costosFijos.agua', () => state.costosFijos.agua, (v) => ({ costosFijos: { agua: v } })],
+      ['costosFijos.luz', () => state.costosFijos.luz, (v) => ({ costosFijos: { luz: v } })],
+      ['costosFijos.otros', () => state.costosFijos.otros, (v) => ({ costosFijos: { otros: v } })],
+      ['costosDirectos.lavanderia', () => state.costosDirectos.lavanderia, (v) => ({ costosDirectos: { lavanderia: v } })],
+      ['costosDirectos.limpieza', () => state.costosDirectos.limpieza, (v) => ({ costosDirectos: { limpieza: v } })],
+      ['costosDirectos.amenities', () => state.costosDirectos.amenities, (v) => ({ costosDirectos: { amenities: v } })],
+      ['costosDirectos.suministrosCocina', () => state.costosDirectos.suministrosCocina, (v) => ({ costosDirectos: { suministrosCocina: v } })],
+      ['cortesias.aguaCostoUnitario', () => state.cortesias.aguaCostoUnitario, (v) => ({ cortesias: { aguaCostoUnitario: v } })],
+      ['cortesias.aguaCantidad', () => state.cortesias.aguaCantidad, (v) => ({ cortesias: { aguaCantidad: v } })],
+      ['cortesias.snacksCostoPorReserva', () => state.cortesias.snacksCostoPorReserva, (v) => ({ cortesias: { snacksCostoPorReserva: v } })],
+      ['configuracion.habitaciones', () => state.configuracion.habitaciones, (v) => ({ configuracion: { habitaciones: v } })],
+      ['configuracion.banos', () => state.configuracion.banos, (v) => ({ configuracion: { banos: v } })],
+      ['configuracion.capacidadBase', () => state.configuracion.capacidadBase, (v) => ({ configuracion: { capacidadBase: v } })],
+      ['configuracion.capacidadMaxima', () => state.configuracion.capacidadMaxima, (v) => ({ configuracion: { capacidadMaxima: v } })],
+      ['configuracion.costoHuespedExtra', () => state.configuracion.costoHuespedExtra, (v) => ({ configuracion: { costoHuespedExtra: v } })],
+      ['configuracion.porcentajePersonaAdicional', () => state.configuracion.porcentajePersonaAdicional, (v) => ({ configuracion: { porcentajePersonaAdicional: v } })],
+      ['estacionalidad.factorIncrementoTemporadaAlta', () => state.estacionalidad.factorIncrementoTemporadaAlta, (v) => ({ estacionalidad: { factorIncrementoTemporadaAlta: v } })],
+      ['simulacion.utilidadDeseadaPorNoche', () => state.simulacion.utilidadDeseadaPorNoche, (v) => ({ simulacion: { utilidadDeseadaPorNoche: v } })],
+      ['simulacion.promedioNochesPorReserva', () => state.simulacion.promedioNochesPorReserva, (v) => ({ simulacion: { promedioNochesPorReserva: v } })],
+      ['simulacion.huespedesReales', () => state.simulacion.huespedesReales, (v) => ({ simulacion: { huespedesReales: v } })],
     ];
-    fields.forEach(([path, getValue, onChange]) => bindNumberInput(root, path, getValue, onChange));
+  }
+
+  function bindStepForm(root, state, onStateChange) {
+    const fields = getFieldPaths(state);
+    fields.forEach(([path, getValue, toPatch]) => bindNumberInput(root, path, getValue, (v) => onStateChange(toPatch(v))));
 
     const ciudadSelect = root.querySelector('[data-field="estacionalidad.ciudad"]');
     if (ciudadSelect) {
+      populateCiudadSelect(root, state.estacionalidad.ciudad);
       ciudadSelect.value = state.estacionalidad.ciudad;
       ciudadSelect.addEventListener('change', () => onStateChange({ estacionalidad: { ciudad: ciudadSelect.value } }));
     }
@@ -227,7 +314,22 @@ window.Sim = window.Sim || {};
       slider.value = state.simulacion.nochesOcupadasMes;
       slider.addEventListener('input', () => onStateChange({ simulacion: { nochesOcupadasMes: sanitizeNumber(slider.value) } }));
     }
+  }
 
+  // Re-reads current values into every bound input, skipping whichever one
+  // the user is actively typing in. Needed because state can change from a
+  // source other than the input itself (e.g. the "usar recomendación" button).
+  function syncStepForm(root, state) {
+    getFieldPaths(state).forEach(([path, getValue]) => {
+      const el = root.querySelector(`[data-field="${path}"]`);
+      if (el && document.activeElement !== el) el.value = getValue();
+    });
+
+    const ciudadSelect = root.querySelector('[data-field="estacionalidad.ciudad"]');
+    if (ciudadSelect && document.activeElement !== ciudadSelect) ciudadSelect.value = state.estacionalidad.ciudad;
+
+    const slider = root.querySelector('[data-field="simulacion.nochesOcupadasMes"]');
+    if (slider && document.activeElement !== slider) slider.value = state.simulacion.nochesOcupadasMes;
   }
 
   function bindStepNavigation(root) {
@@ -246,5 +348,5 @@ window.Sim = window.Sim || {};
     showStep(tabs[0]?.dataset.stepTab);
   }
 
-  window.Sim.ui = { renderDashboard, renderFeriados, bindStepForm, bindStepNavigation, bindFormulasToggle };
+  window.Sim.ui = { renderDashboard, renderFeriados, bindStepForm, syncStepForm, bindStepNavigation, bindFormulasToggle };
 })();

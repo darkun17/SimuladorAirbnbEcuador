@@ -9,7 +9,7 @@
       costosFijos: { alicuota: 0, internet: 0, seguro: 0, agua: 0, luz: 0, otros: 0 },
       costosDirectos: { lavanderia: 0, limpieza: 0, amenities: 0, suministrosCocina: 0 },
       cortesias: { aguaCostoUnitario: 0, aguaCantidad: 0, snacksCostoPorReserva: 0 },
-      configuracion: { habitaciones: 1, banos: 1, capacidadBase: 3, capacidadMaxima: 6, costoHuespedExtra: 0 },
+      configuracion: { habitaciones: 1, banos: 1, capacidadBase: 3, capacidadMaxima: 6, costoHuespedExtra: 0, porcentajePersonaAdicional: 50 },
       estacionalidad: {
         ciudad: 'Loja',
         factorIncrementoTemporadaAlta: 30,

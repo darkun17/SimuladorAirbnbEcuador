@@ -96,6 +96,8 @@
           <h2 class="font-semibold">Persona Adicional</h2>
           <label class="block text-sm text-slate-500">Costo adicional por huésped extra ($/noche)</label>
           <input data-field="configuracion.costoHuespedExtra" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
+          <label class="block text-sm text-slate-500">% recomendado para persona adicional</label>
+          <input data-field="configuracion.porcentajePersonaAdicional" type="number" min="0" max="100" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
           <label class="block text-sm text-slate-500">Huéspedes reales en la simulación</label>
           <input data-field="simulacion.huespedesReales" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
         </div>
@@ -113,17 +115,8 @@
           <h2 class="font-semibold">Ciudad y Temporada Alta</h2>
           <label class="block text-sm text-slate-500">Ciudad</label>
           <select data-field="estacionalidad.ciudad" class="w-full rounded-lg border-slate-200 border px-2 py-1">
-            <option>Quito</option>
-            <option>Guayaquil</option>
-            <option>Cuenca</option>
-            <option>Loja</option>
-            <option>Salinas</option>
-            <option>Manta</option>
-            <option>Ambato</option>
-            <option>Ibarra</option>
-            <option>Riobamba</option>
-            <option>Otra</option>
           </select>
+          <p class="text-xs text-slate-500">Las 24 provincias y sus cantones — los precios de temporada suelen variar por sector.</p>
           <label class="block text-sm text-slate-500">Factor de incremento temporada alta (%)</label>
           <input data-field="estacionalidad.factorIncrementoTemporadaAlta" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1" />
         </div>
@@ -149,7 +142,30 @@
         <div class="grid md:grid-cols-3 gap-4 text-sm">
           <div><p class="text-slate-400">Noche regular / temporada baja</p><p id="kpi-tarifa-regular" class="text-2xl font-bold text-emerald-400"></p></div>
           <div><p class="text-slate-400">Noche feriado / temporada alta</p><p id="kpi-tarifa-feriado" class="text-2xl font-bold text-emerald-400"></p></div>
-          <div><p class="text-slate-400">Persona adicional recomendada</p><p id="kpi-tarifa-persona-extra" class="text-2xl font-bold text-emerald-400"></p></div>
+          <div>
+            <p class="text-slate-400">Persona adicional recomendada</p>
+            <p id="kpi-tarifa-persona-extra" class="text-2xl font-bold text-emerald-400"></p>
+            <button id="btn-usar-recomendacion-persona" type="button" class="text-xs text-emerald-400 hover:underline mt-1">Usar este valor →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-2">
+        <h2 class="font-semibold">Estrategias de Precio</h2>
+        <p class="text-xs text-slate-500">Para que sepas cuánto margen tienes antes de perder rentabilidad.</p>
+        <div class="grid md:grid-cols-3 gap-4 text-sm">
+          <div>
+            <p class="text-slate-500">Descuento máximo recomendado</p>
+            <p id="kpi-descuento-maximo" class="text-lg font-semibold text-emerald-500"></p>
+          </div>
+          <div>
+            <p class="text-slate-500">Precio mínimo rentable (noche)</p>
+            <p id="kpi-precio-minimo" class="text-lg font-semibold"></p>
+          </div>
+          <div>
+            <p class="text-slate-500">Noches mínimas recomendadas por reserva</p>
+            <p id="kpi-noches-minimas" class="text-lg font-semibold"></p>
+          </div>
         </div>
       </div>
 
@@ -225,6 +241,22 @@
             <p id="formula-persona-adicional" class="font-mono text-slate-900"></p>
           </div>
           <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Persona Adicional Recomendada = (Precio Base / Capacidad Base) × (% recomendado / 100)</p>
+            <p id="formula-persona-recomendada" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Precio Mínimo Rentable = Precio Base recalculado con Utilidad Neta Objetivo = $0 (cubre solo costos)</p>
+            <p id="formula-precio-minimo" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Descuento Máximo Recomendado = ((Precio Base − Precio Mínimo Rentable) / Precio Base) × 100</p>
+            <p id="formula-descuento-maximo" class="font-mono text-slate-900"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <p class="text-slate-500">Noches Mínimas Recomendadas = Costo Directo por Reserva / (Precio Base − Comisión Airbnb − Costo Fijo Diario)</p>
+            <p id="formula-noches-minimas" class="font-mono text-slate-900 whitespace-pre-line"></p>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
             <p class="text-slate-500">Margen de Contribución por Noche = Precio Base − Comisión Airbnb − (Costo Directo / Promedio Noches por Reserva)</p>
             <p id="formula-margen-contribucion" class="font-mono text-slate-900"></p>
             <p class="text-slate-500 mt-2">Punto de Equilibrio = Costos Fijos Mensuales / Margen de Contribución por Noche</p>
@@ -235,7 +267,14 @@
     </section>
   </main>
 
+  <footer class="max-w-6xl mx-auto px-6 py-6 text-center text-xs text-slate-500">
+    Creado por Byron Lima · Instagram
+    <a href="https://instagram.com/math3son" target="_blank" rel="noopener" class="text-emerald-500 hover:underline">@math3son</a>
+    · 0989452132
+  </footer>
+
   <script src="js/holidays.js"></script>
+  <script src="js/locations.js"></script>
   <script src="js/calculations.js"></script>
   <script src="js/state.js"></script>
   <script src="js/db.js"></script>
