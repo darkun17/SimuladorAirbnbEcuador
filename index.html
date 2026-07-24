@@ -51,150 +51,208 @@
           <li>La próxima vez que abras <code class="bg-slate-100 px-1 rounded">index.html</code>, tus datos se cargan automáticamente desde el mismo archivo.</li>
         </ol>
       </div>
-      <div>
-        <h2 class="font-semibold mb-1">Código fuente y colaboración</h2>
-        <p class="text-sm text-slate-500">
-          El proyecto es de código abierto. Puedes descargarlo, revisarlo o contribuir aquí:
-          <a href="https://github.com/darkun17/SimuladorAirbnbEcuador" target="_blank" rel="noopener" class="text-emerald-500 hover:underline font-medium">github.com/darkun17/SimuladorAirbnbEcuador</a>
-        </p>
-      </div>
     </div>
   </div>
 
   <main class="w-full mx-auto p-3 sm:p-4 xl:px-6 2xl:px-10">
-    <section id="intro-info" class="print:hidden bg-white border border-slate-200 rounded-xl overflow-hidden mb-6">
-      <div class="grid lg:grid-cols-2">
-        <div class="relative pb-10 sm:pb-12">
-          <div class="bg-gradient-to-br from-emerald-500 to-slate-900 min-h-[180px] sm:min-h-[220px] flex items-center justify-center overflow-hidden">
-            <svg viewBox="0 0 400 240" class="w-full h-full max-h-[220px]" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Ilustración minimalista de una sala de estar">
-              <rect x="0" y="150" width="400" height="90" fill="#0b1324" opacity="0.35" />
-              <ellipse cx="150" cy="205" rx="120" ry="18" fill="#0b1324" opacity="0.25" />
-              <rect x="30" y="30" width="150" height="140" rx="10" fill="#F8FAFC" opacity="0.15" />
-              <rect x="40" y="40" width="130" height="110" rx="4" fill="#DBEAFE" opacity="0.85" />
-              <rect x="80" y="95" width="16" height="55" fill="#0F172A" opacity="0.55" />
-              <rect x="105" y="75" width="14" height="75" fill="#0F172A" opacity="0.55" />
-              <rect x="128" y="105" width="16" height="45" fill="#0F172A" opacity="0.55" />
-              <rect x="150" y="85" width="12" height="65" fill="#0F172A" opacity="0.55" />
-              <line x1="105" y1="40" x2="105" y2="150" stroke="#F8FAFC" stroke-width="3" opacity="0.5" />
-              <line x1="40" y1="95" x2="170" y2="95" stroke="#F8FAFC" stroke-width="3" opacity="0.5" />
-              <rect x="215" y="118" width="150" height="42" rx="12" fill="#F8FAFC" />
-              <rect x="205" y="128" width="24" height="58" rx="10" fill="#F8FAFC" />
-              <rect x="351" y="128" width="24" height="58" rx="10" fill="#F8FAFC" />
-              <rect x="219" y="150" width="142" height="36" rx="10" fill="#F8FAFC" />
-              <line x1="290" y1="152" x2="290" y2="184" stroke="#CBD5E1" stroke-width="3" />
-              <rect x="230" y="186" width="130" height="8" rx="4" fill="#0b1324" opacity="0.2" />
-              <circle cx="70" cy="180" r="6" fill="#F8FAFC" opacity="0.6" />
-              <rect x="60" y="186" width="20" height="18" rx="2" fill="#F8FAFC" opacity="0.6" />
-              <ellipse cx="70" cy="168" rx="16" ry="14" fill="#10B981" />
-              <ellipse cx="58" cy="176" rx="12" ry="10" fill="#10B981" opacity="0.85" />
-              <ellipse cx="82" cy="176" rx="12" ry="10" fill="#10B981" opacity="0.85" />
+    <div id="intro-info" class="print:hidden">
+    <section class="grid lg:grid-cols-2 gap-4 mb-6 items-stretch">
+      <div class="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 flex flex-col">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-11 h-11 shrink-0 rounded-full bg-emerald-100 flex items-center justify-center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+              <line x1="4" y1="20" x2="20" y2="20" /><rect x="6" y="12" width="3" height="8" /><rect x="11" y="8" width="3" height="12" /><rect x="16" y="4" width="3" height="16" />
             </svg>
           </div>
-          <div class="relative z-10 -mt-8 mx-4 sm:mx-6 bg-white rounded-xl border border-slate-200 shadow-sm p-4 space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 flex items-center justify-center text-lg">💰</div>
-              <h3 class="font-semibold text-sm">Calcula tu potencial de ingresos</h3>
-            </div>
-            <p class="text-xs text-slate-500">Ingresa tus costos y descubre la tarifa ideal para maximizar tus ganancias.</p>
-            <div class="flex justify-around pt-2 border-t border-slate-100 text-xs text-slate-500">
-              <div class="text-center"><div class="text-base">✅</div>Fácil</div>
-              <div class="text-center"><div class="text-base">⚡</div>Rápido</div>
-              <div class="text-center"><div class="text-base">🛡️</div>Confiable</div>
-            </div>
+          <h2 class="font-semibold text-lg sm:text-xl">Calcula tu potencial de ingresos</h2>
+        </div>
+        <p class="text-sm text-slate-500 mb-8">Ingresa tus costos y descubre la tarifa ideal para maximizar tus ganancias.</p>
+        <div class="flex items-start justify-center gap-0 mt-auto pt-4">
+          <div class="flex flex-col items-center gap-2 w-24">
+            <div class="w-11 h-11 rounded-full bg-emerald-500 text-white text-sm font-semibold flex items-center justify-center">01</div>
+            <span class="text-xs font-medium text-slate-600 text-center">Costos</span>
+          </div>
+          <div class="w-10 sm:w-16 h-[2px] bg-slate-200 mt-[22px]"></div>
+          <div class="flex flex-col items-center gap-2 w-24">
+            <div class="w-11 h-11 rounded-full bg-red-500 text-white text-sm font-semibold flex items-center justify-center">02</div>
+            <span class="text-xs font-medium text-slate-600 text-center">Alojamiento</span>
+          </div>
+          <div class="w-10 sm:w-16 h-[2px] bg-slate-200 mt-[22px]"></div>
+          <div class="flex flex-col items-center gap-2 w-24">
+            <div class="w-11 h-11 rounded-full bg-blue-500 text-white text-sm font-semibold flex items-center justify-center">03</div>
+            <span class="text-xs font-medium text-slate-600 text-center">Resultados</span>
           </div>
         </div>
+      </div>
 
-        <div class="p-6 pt-10 lg:pt-6 space-y-4">
+      <div class="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 space-y-5">
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 flex items-center justify-center text-base">💡</div>
           <div>
-            <div class="flex items-center gap-3 mb-1">
-              <div class="w-9 h-9 shrink-0 rounded-full bg-emerald-100 flex items-center justify-center text-base">💡</div>
-              <h2 class="font-semibold">¿Qué es esto?</h2>
-            </div>
+            <h2 class="font-semibold mb-1">¿Qué es esto?</h2>
             <p class="text-sm text-slate-500">
               Una calculadora para anfitriones de Airbnb en Ecuador. Ingresas tus costos fijos y directos, y el
               simulador te dice qué tarifa publicar por noche para cubrir tus gastos y alcanzar la utilidad que
-              quieres — descontando ya la comisión de Airbnb (15.5%) y el IVA (15%). También te muestra tarifas
-              para feriados, temporada alta, huéspedes adicionales, y hasta qué punto puedes dar descuentos sin
-              perder rentabilidad.
+              quieres descontando comusiones e IVA.
             </p>
           </div>
-          <div class="border-t border-slate-100 pt-4">
-            <div class="flex items-center gap-3 mb-1">
-              <div class="w-9 h-9 shrink-0 rounded-full bg-blue-100 flex items-center justify-center text-base">📋</div>
-              <h2 class="font-semibold">Cómo usarlo</h2>
-            </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 shrink-0 rounded-full bg-blue-100 flex items-center justify-center text-base">📋</div>
+          <div>
+            <h2 class="font-semibold mb-1">Cómo usarlo</h2>
             <ol class="text-sm text-slate-500 list-decimal list-inside space-y-1">
               <li>Abre este archivo (<code class="bg-slate-100 px-1 rounded">index.html</code>) con doble clic en <strong>Google Chrome</strong> o <strong>Microsoft Edge</strong>.</li>
-              <li>La primera vez, elige "Crear nuevo simulador.db" y guarda el archivo donde quieras — recomendado, la misma carpeta del proyecto.</li>
-              <li>Completa los 3 pasos del formulario (Costos, Configuración, Estacionalidad). Todo se guarda solo en ese archivo mientras escribes.</li>
-              <li>Revisa el panel "Ver fórmulas y valores usados" al final del dashboard para validar cada cálculo.</li>
-              <li>La próxima vez que abras <code class="bg-slate-100 px-1 rounded">index.html</code>, tus datos se cargan automáticamente desde el mismo archivo.</li>
+              <li>La primera vez, elige "Crear nuevo simulador.db" y guarda el archivo donde quieras.</li>
+              <li>Completa los 3 pasos del formulario (Costos, Configuración, Estacionalidad [Feriados]).</li>
+              <li>Revisa "Ver fórmulas y valores usados" para validar cada cálculo.</li>
             </ol>
-          </div>
-          <div class="border-t border-slate-100 pt-4">
-            <div class="flex items-center gap-3 mb-1">
-              <div class="w-9 h-9 shrink-0 rounded-full bg-purple-100 flex items-center justify-center text-base">💻</div>
-              <h2 class="font-semibold">Código fuente y colaboración</h2>
-            </div>
-            <p class="text-sm text-slate-500">
-              El proyecto es de código abierto. Puedes descargarlo, revisarlo o contribuir aquí:
-              <a href="https://github.com/darkun17/SimuladorAirbnbEcuador" target="_blank" rel="noopener" class="text-emerald-500 hover:underline font-medium">github.com/darkun17/SimuladorAirbnbEcuador</a>
-            </p>
           </div>
         </div>
       </div>
     </section>
+
+    <section class="bg-white border border-slate-200 rounded-xl p-6 mb-6">
+      <h2 class="text-center font-semibold text-lg sm:text-xl mb-5">¿Cómo funciona?</h2>
+      <div class="grid sm:grid-cols-3 gap-4 sm:gap-3 items-stretch relative">
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-center relative">
+          <div class="w-7 h-7 mx-auto -mt-9 mb-2 rounded-full bg-red-500 text-white text-xs font-semibold flex items-center justify-center">1</div>
+          <div class="w-12 h-12 mx-auto rounded-full bg-slate-900 flex items-center justify-center mb-3">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+              <rect x="4" y="3" width="16" height="18" rx="2" />
+              <line x1="8" y1="7" x2="16" y2="7" />
+              <circle cx="8" cy="12" r="0.6" fill="#ffffff" stroke="none" />
+              <circle cx="12" cy="12" r="0.6" fill="#ffffff" stroke="none" />
+              <circle cx="16" cy="12" r="0.6" fill="#ffffff" stroke="none" />
+              <circle cx="8" cy="16" r="0.6" fill="#ffffff" stroke="none" />
+              <circle cx="12" cy="16" r="0.6" fill="#ffffff" stroke="none" />
+              <line x1="16" y1="15" x2="16" y2="18" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-sm mb-1">Ingresa tus costos</h3>
+          <p class="text-xs text-slate-500">Costos fijos, limpieza, suministros y cortesías para huéspedes.</p>
+        </div>
+        <div class="hidden sm:flex items-center justify-center absolute left-1/3 -translate-x-1/2 top-1/2 -translate-y-1/2 w-8 text-slate-300">
+          <svg viewBox="0 0 32 12" class="w-8 h-3"><line x1="0" y1="6" x2="24" y2="6" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3" /><polygon points="24,2 32,6 24,10" fill="currentColor" /></svg>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-center relative">
+          <div class="w-7 h-7 mx-auto -mt-9 mb-2 rounded-full bg-red-500 text-white text-xs font-semibold flex items-center justify-center">2</div>
+          <div class="w-12 h-12 mx-auto rounded-full bg-slate-900 flex items-center justify-center mb-3">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+              <path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6" />
+              <path d="M3 18v2" />
+              <path d="M21 18v2" />
+              <path d="M3 12V8a2 2 0 0 1 2-2h4v4" />
+              <path d="M9 10h6" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-sm mb-1">Configura tu alojamiento</h3>
+          <p class="text-xs text-slate-500">Capacidad, habitaciones, baños, personas adicionales y objetivos.</p>
+        </div>
+        <div class="hidden sm:flex items-center justify-center absolute left-2/3 -translate-x-1/2 top-1/2 -translate-y-1/2 w-8 text-slate-300">
+          <svg viewBox="0 0 32 12" class="w-8 h-3"><line x1="0" y1="6" x2="24" y2="6" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3" /><polygon points="24,2 32,6 24,10" fill="currentColor" /></svg>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-center relative">
+          <div class="w-7 h-7 mx-auto -mt-9 mb-2 rounded-full bg-red-500 text-white text-xs font-semibold flex items-center justify-center">3</div>
+          <div class="w-12 h-12 mx-auto rounded-full bg-slate-900 flex items-center justify-center mb-3">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+              <polyline points="3,17 10,10 14,14 21,7" />
+              <polyline points="15,7 21,7 21,13" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-sm mb-1">Obtén el precio recomendado</h3>
+          <p class="text-xs text-slate-500">Tarifas sugeridas, proyecciones, utilidad y punto de equilibrio.</p>
+        </div>
+      </div>
+
+      <h3 class="text-center font-semibold text-base mt-8 mb-4">Todo lo que calcula por ti</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+        <div class="border border-slate-200 rounded-xl p-3 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M20.6 12.3 12.7 20.2a2 2 0 0 1-2.8 0l-7-7a2 2 0 0 1 0-2.9L10.8 2.4 20.6 3l.6 9.3z" /><circle cx="15.5" cy="7.5" r="1.3" /></svg>
+          </div>
+          <p class="text-xs font-medium leading-tight">Tarifa recomendada</p>
+        </div>
+        <div class="border border-slate-200 rounded-xl p-3 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><polyline points="3,17 10,10 14,14 21,7" /><polyline points="15,7 21,7 21,13" /></svg>
+          </div>
+          <p class="text-xs font-medium leading-tight">Rentabilidad y márgenes</p>
+        </div>
+        <div class="border border-slate-200 rounded-xl p-3 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><rect x="3" y="5" width="18" height="16" rx="2" /><line x1="3" y1="10" x2="21" y2="10" /><line x1="8" y1="3" x2="8" y2="7" /><line x1="16" y1="3" x2="16" y2="7" /></svg>
+          </div>
+          <p class="text-xs font-medium leading-tight">Temporadas y feriados locales</p>
+        </div>
+        <div class="border border-slate-200 rounded-xl p-3 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M3 7a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v3" /><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-5a2 2 0 1 0 0 4h5" /></svg>
+          </div>
+          <p class="text-xs font-medium leading-tight">Costos fijos y variables</p>
+        </div>
+        <div class="border border-slate-200 rounded-xl p-3 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="9" y1="12" x2="15" y2="12" /></svg>
+          </div>
+          <p class="text-xs font-medium leading-tight">IVA y comisión de Airbnb</p>
+        </div>
+        <div class="border border-slate-200 rounded-xl p-3 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="9" cy="8" r="3" /><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" /><circle cx="17" cy="8" r="2.5" /><path d="M16 14.2c2.3.6 4 2.7 4 5.8" /></svg>
+          </div>
+          <p class="text-xs font-medium leading-tight">Capacidad y personas extra</p>
+        </div>
+        <div class="border border-slate-200 rounded-xl p-3 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><line x1="4" y1="20" x2="20" y2="20" /><rect x="6" y="12" width="3" height="8" /><rect x="11" y="8" width="3" height="12" /><rect x="16" y="4" width="3" height="16" /></svg>
+          </div>
+          <p class="text-xs font-medium leading-tight">Proyección mensual</p>
+        </div>
+        <div class="border border-slate-200 rounded-xl p-3 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="4" /><circle cx="12" cy="12" r="0.6" fill="#ef4444" stroke="none" /></svg>
+          </div>
+          <p class="text-xs font-medium leading-tight">Punto de equilibrio</p>
+        </div>
+      </div>
+    </section>
+    </div>
 
     <section id="unsupported-screen" class="hidden bg-white border border-slate-200 rounded-xl p-8 text-center">
       <p class="text-red-500 font-semibold">Este simulador requiere Google Chrome o Microsoft Edge para guardar tus datos en un archivo.</p>
     </section>
 
-    <section id="welcome-screen" class="hidden bg-white border border-slate-200 rounded-xl p-6 sm:p-8">
-      <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 text-center sm:text-left">
-        <div class="w-20 h-20 shrink-0">
-          <svg viewBox="0 0 100 90" class="w-full h-full" role="img" aria-label="Laptop mostrando un gráfico de crecimiento">
-            <rect x="18" y="12" width="64" height="46" rx="5" fill="#0F172A" />
-            <rect x="24" y="18" width="52" height="34" rx="2" fill="#F8FAFC" />
-            <polygon points="8,64 92,64 82,58 18,58" fill="#0F172A" />
-            <rect x="0" y="64" width="100" height="6" rx="3" fill="#334155" />
-            <rect x="32" y="38" width="9" height="12" fill="#10B981" />
-            <rect x="45" y="32" width="9" height="18" fill="#10B981" />
-            <rect x="58" y="26" width="9" height="24" fill="#10B981" />
-            <polyline points="32,34 45,26 58,20 68,14" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            <polygon points="68,14 61,15 66,21" fill="#10B981" />
+    <section id="welcome-screen" class="hidden bg-emerald-50 border border-emerald-100 rounded-xl p-6 sm:p-8">
+      <div class="flex flex-col sm:flex-row items-center gap-5 sm:gap-6 text-center sm:text-left">
+        <div class="w-14 h-14 shrink-0 rounded-full bg-white flex items-center justify-center border border-emerald-100">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7">
+            <rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8" /><path d="M12 16v4" /><polyline points="7,12 10,9 13,11 17,7" />
           </svg>
         </div>
         <div class="flex-1">
           <h2 class="font-semibold text-lg mb-1">¿Listo para conocer el potencial de tu propiedad?</h2>
-          <p class="text-sm text-slate-500 mb-4">Elige cómo empezar — tus datos se guardan solos en un archivo en tu computadora.</p>
-          <div class="flex flex-wrap justify-center sm:justify-start gap-3">
-            <button id="btn-crear-nuevo" class="bg-emerald-500 text-white rounded-xl px-5 py-3 font-medium">✨ Crear nuevo simulador.db</button>
-            <button id="btn-abrir-existente" class="bg-slate-900 text-white rounded-xl px-5 py-3 font-medium">📂 Abrir simulador.db existente</button>
-          </div>
+          <p class="text-sm text-slate-500">Elige cómo empezar — tus datos se guardan solos en un archivo en tu computadora.</p>
+        </div>
+        <div class="flex flex-wrap justify-center sm:justify-end gap-3 shrink-0">
+          <button id="btn-crear-nuevo" class="bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl px-5 py-3 font-medium whitespace-nowrap">✨ Crear nuevo simulador.db</button>
+          <button id="btn-abrir-existente" class="bg-slate-900 hover:bg-slate-800 text-white rounded-xl px-5 py-3 font-medium whitespace-nowrap">📂 Abrir existente</button>
         </div>
       </div>
     </section>
 
-    <section id="resume-screen" class="hidden bg-white border border-slate-200 rounded-xl p-6 sm:p-8">
-      <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 text-center sm:text-left">
-        <div class="w-20 h-20 shrink-0">
-          <svg viewBox="0 0 100 90" class="w-full h-full" role="img" aria-label="Laptop mostrando un gráfico de crecimiento">
-            <rect x="18" y="12" width="64" height="46" rx="5" fill="#0F172A" />
-            <rect x="24" y="18" width="52" height="34" rx="2" fill="#F8FAFC" />
-            <polygon points="8,64 92,64 82,58 18,58" fill="#0F172A" />
-            <rect x="0" y="64" width="100" height="6" rx="3" fill="#334155" />
-            <rect x="32" y="38" width="9" height="12" fill="#10B981" />
-            <rect x="45" y="32" width="9" height="18" fill="#10B981" />
-            <rect x="58" y="26" width="9" height="24" fill="#10B981" />
-            <polyline points="32,34 45,26 58,20 68,14" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            <polygon points="68,14 61,15 66,21" fill="#10B981" />
+    <section id="resume-screen" class="hidden bg-emerald-50 border border-emerald-100 rounded-xl p-6 sm:p-8">
+      <div class="flex flex-col sm:flex-row items-center gap-5 sm:gap-6 text-center sm:text-left">
+        <div class="w-14 h-14 shrink-0 rounded-full bg-white flex items-center justify-center border border-emerald-100">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7">
+            <rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8" /><path d="M12 16v4" /><polyline points="7,12 10,9 13,11 17,7" />
           </svg>
         </div>
         <div class="flex-1">
           <h2 class="font-semibold text-lg mb-1">¿Listo para conocer el potencial de tu propiedad?</h2>
-          <p class="text-sm text-slate-500 mb-4">Inicia el simulador y toma decisiones inteligentes basadas en datos reales.</p>
-          <button id="btn-continuar" class="bg-emerald-500 text-white rounded-xl px-5 py-3 font-medium">▶ Continuar con simulador.db</button>
+          <p class="text-sm text-slate-500">Inicia el simulador y toma decisiones inteligentes basadas en datos reales.</p>
         </div>
+        <button id="btn-continuar" class="bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl px-6 py-3 font-medium shrink-0 whitespace-nowrap">▶ Continuar con simulador.db</button>
       </div>
     </section>
 
