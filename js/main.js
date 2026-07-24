@@ -5,10 +5,10 @@
     bindStepForm,
     syncStepForm,
     bindAccordions,
-    bindFeriadosModal,
+    bindEstacionalidadModal,
     renderDashboard,
     renderFeriados,
-    bindFormulasToggle,
+    bindFormulasModal,
   } = window.Sim.ui;
   const {
     isFileSystemAccessSupported,
@@ -72,13 +72,13 @@
     document.getElementById('btn-manual').classList.remove('hidden');
     document.getElementById('btn-guardar').classList.remove('hidden');
     document.getElementById('btn-exportar-pdf').classList.remove('hidden');
+    document.getElementById('btn-estacionalidad').classList.remove('hidden');
+    document.getElementById('btn-formulas-modal').classList.remove('hidden');
     document.getElementById('welcome-screen').classList.add('hidden');
     document.getElementById('resume-screen').classList.add('hidden');
     document.getElementById('app-screen').classList.remove('hidden');
     const root = document.getElementById('app-screen');
     bindAccordions(root);
-    bindFeriadosModal(root);
-    bindFormulasToggle(root);
 
     function onStateChange(patch) {
       state = mergeState(state, patch);
@@ -124,6 +124,8 @@
 
   async function init() {
     bindManualModal();
+    bindEstacionalidadModal();
+    bindFormulasModal();
     bindHeaderActions();
 
     if (!isFileSystemAccessSupported()) {

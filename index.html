@@ -17,6 +17,8 @@
     </div>
     <div class="flex items-center flex-wrap justify-end gap-2 sm:gap-3">
       <p class="hidden xl:block text-xs text-slate-400 mr-2">Descubre cuánto podrías ganar con tu propiedad</p>
+      <button id="btn-estacionalidad" class="hidden bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg px-3 py-2 font-medium whitespace-nowrap">📅 Estacionalidad</button>
+      <button id="btn-formulas-modal" class="hidden bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg px-3 py-2 font-medium whitespace-nowrap">🧮 Fórmulas</button>
       <button id="btn-manual" class="hidden bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg px-3 py-2 font-medium whitespace-nowrap">📖 Manual de uso</button>
       <button id="btn-guardar" class="hidden bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg px-3 py-2 font-medium whitespace-nowrap">💾 Guardar</button>
       <button id="btn-exportar-pdf" class="hidden bg-red-500 hover:bg-red-600 text-white text-sm rounded-lg px-3 py-2 font-medium whitespace-nowrap">📄 Exportar PDF</button>
@@ -334,13 +336,6 @@
                   <input data-field="configuracion.capacidadMaxima" type="number" min="0" class="w-full rounded-lg border-slate-200 border px-2 py-1.5 text-sm" />
                 </div>
                 <div>
-                  <label class="block text-xs text-slate-500 mb-1">Costo huésped extra ($/noche)</label>
-                  <div class="relative">
-                    <span class="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none">$</span>
-                    <input data-field="configuracion.costoHuespedExtra" type="number" min="0" step="0.01" class="w-full rounded-lg border-slate-200 border pl-5 pr-2 py-1.5 text-sm" />
-                  </div>
-                </div>
-                <div>
                   <label class="block text-xs text-slate-500 mb-1">% recomendado persona adicional</label>
                   <div class="relative">
                     <input data-field="configuracion.porcentajePersonaAdicional" type="number" min="0" max="100" class="w-full rounded-lg border-slate-200 border pl-2 pr-6 py-1.5 text-sm" />
@@ -366,32 +361,6 @@
             </div>
           </div>
 
-          <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
-            <button type="button" data-accordion-toggle="acc-estacionalidad" class="w-full flex items-center gap-3 p-4 text-left">
-              <div class="w-9 h-9 shrink-0 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-base">📅</div>
-              <span class="font-semibold flex-1">3. Estacionalidad</span>
-              <span data-accordion-chevron="acc-estacionalidad" class="text-slate-400 transition-transform">▾</span>
-            </button>
-            <div data-accordion-panel="acc-estacionalidad" class="px-4 pb-4">
-              <div class="grid grid-cols-2 gap-x-3 gap-y-2.5">
-                <div>
-                  <label class="block text-xs text-slate-500 mb-1">Ciudad</label>
-                  <select data-field="estacionalidad.ciudad" class="w-full rounded-lg border-slate-200 border px-2 py-1.5 text-sm"></select>
-                </div>
-                <div>
-                  <label class="block text-xs text-slate-500 mb-1">Factor incremento temp. alta</label>
-                  <div class="relative">
-                    <input data-field="estacionalidad.factorIncrementoTemporadaAlta" type="number" min="0" class="w-full rounded-lg border-slate-200 border pl-2 pr-6 py-1.5 text-sm" />
-                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none">%</span>
-                  </div>
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-2 pt-3">
-                <button type="button" id="btn-abrir-feriados" class="flex items-center gap-1.5 justify-center bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-2 py-2 text-xs font-medium">🗓️ Ver feriados</button>
-                <button type="button" id="btn-administrar-temporadas" class="flex items-center gap-1.5 justify-center bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-2 py-2 text-xs font-medium">📊 Temporadas</button>
-              </div>
-            </div>
-          </div>
         </aside>
 
         <div class="space-y-3 min-w-0">
@@ -419,7 +388,7 @@
             <p class="font-semibold text-sm">Persona adicional</p>
             <p class="text-xs text-slate-500 mb-2">Recomendada</p>
             <p id="kpi-tarifa-persona-extra" class="text-2xl font-bold text-slate-900"></p>
-            <button id="btn-usar-recomendacion-persona" type="button" class="mt-2 text-xs bg-emerald-500 hover:bg-emerald-600 text-white rounded-full px-3 py-1.5 font-medium">Usar este valor →</button>
+            <p id="kpi-tarifa-persona-total" class="mt-2 text-xs text-slate-500"></p>
           </div>
         </div>
       </div>
@@ -516,100 +485,122 @@
         </div>
       </div>
 
-      <div class="bg-white border border-slate-200 rounded-xl p-3">
-        <div class="flex flex-wrap gap-2">
-          <button id="btn-toggle-formulas" type="button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full px-3 py-1.5 font-semibold text-xs">🧮 Ver fórmulas y valores usados</button>
-          <span class="flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-3 py-1.5 text-xs font-medium">✅ Validar cálculos</span>
-        </div>
-        <div id="formulas-panel" class="hidden mt-4 space-y-4 text-sm">
-          <div class="border-t border-slate-200 pt-3 first:border-0 first:pt-0">
-            <p class="text-slate-500">Costo Fijo Diario = (Σ Costos Fijos Mensuales) / 30</p>
-            <p id="formula-costo-fijo" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Costo Directo por Reserva = Lavandería + Limpieza + Amenities + Suministros + (Agua × cantidad) + Snacks</p>
-            <p id="formula-costo-directo" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Ingreso Neto Necesario = Utilidad Deseada + Costo Fijo Diario + (Costo Directo / Promedio Noches por Reserva)</p>
-            <p id="formula-ingreso-neto" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Precio Final a Publicar = Ingreso Neto Necesario / (1 − 0.155 − 0.15). Este es el precio que ve y paga el huésped.</p>
-            <p id="formula-precio-base" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Comisión Airbnb Retenida (15.5%) = Precio Final × 0.155 — esto SÍ lo descuenta Airbnb directamente de tu pago</p>
-            <p id="formula-comision" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Depósito de Airbnb ("Ganas") = Precio Final − Comisión</p>
-            <p id="formula-deposito-airbnb" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Monto IVA (15%) = Precio Final × 0.15 — esto es tu obligación tributaria aparte; Airbnb NO la retiene ni la muestra en tu pago, pero igual sale de tu bolsillo</p>
-            <p id="formula-iva" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Ingreso Neto que Recibe el Anfitrión = Depósito de Airbnb − IVA (verificación: debe coincidir con el Ingreso Neto Necesario)</p>
-            <p id="formula-precio-final" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Tarifa Feriado / Temporada Alta = Precio Final × (1 + Factor Incremento %); comisión e IVA se recalculan sobre ese nuevo precio</p>
-            <p id="formula-feriado" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Tarifa Persona Adicional = Precio Final + ((Huéspedes Reales − Capacidad Base) × Costo Huésped Extra), solo si Huéspedes Reales &gt; Capacidad Base</p>
-            <p id="formula-persona-adicional" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Persona Adicional Recomendada = (Precio Final / Capacidad Base) × (% recomendado / 100)</p>
-            <p id="formula-persona-recomendada" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Precio Mínimo Rentable = Precio Final recalculado con Utilidad Neta Objetivo = $0 (cubre solo costos)</p>
-            <p id="formula-precio-minimo" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Descuento Máximo Recomendado = ((Precio Final − Precio Mínimo Rentable) / Precio Final) × 100</p>
-            <p id="formula-descuento-maximo" class="font-mono text-slate-900"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Noches Mínimas Recomendadas = Costo Directo por Reserva / (Precio Final − Comisión Airbnb − IVA − Costo Fijo Diario)</p>
-            <p id="formula-noches-minimas" class="font-mono text-slate-900 whitespace-pre-line"></p>
-          </div>
-          <div class="border-t border-slate-200 pt-3">
-            <p class="text-slate-500">Margen de Contribución por Noche = Precio Final − Comisión Airbnb − IVA − (Costo Directo / Promedio Noches por Reserva)</p>
-            <p id="formula-margen-contribucion" class="font-mono text-slate-900"></p>
-            <p class="text-slate-500 mt-2">Punto de Equilibrio = Costos Fijos Mensuales / Margen de Contribución por Noche</p>
-            <p id="formula-break-even" class="font-mono text-slate-900"></p>
-          </div>
-        </div>
-      </div>
         </div>
       </div>
     </section>
   </main>
 
-  <div id="modal-feriados" class="hidden print:hidden fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50">
+  <div id="modal-estacionalidad" class="hidden print:hidden fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-4 relative min-w-0">
-      <button id="btn-cerrar-feriados" class="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-xl leading-none">×</button>
-      <h2 class="font-semibold text-lg">Feriados y Fiestas Locales</h2>
-      <p class="text-xs text-slate-500">Las 24 provincias y sus cantones — los precios de temporada suelen variar por sector.</p>
-      <div class="overflow-x-auto">
-        <table id="tabla-feriados" class="w-full text-sm min-w-[560px]">
-          <thead>
-            <tr class="text-slate-500 text-left">
-              <th class="px-3 py-2">Nombre</th>
-              <th class="px-3 py-2">Fecha</th>
-              <th class="px-3 py-2">Tipo</th>
-              <th class="px-3 py-2"></th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <button id="btn-cerrar-estacionalidad" class="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-xl leading-none">×</button>
+      <h2 class="font-semibold text-lg">Estacionalidad</h2>
+
+      <div class="grid grid-cols-2 gap-x-3 gap-y-2.5">
+        <div>
+          <label class="block text-xs text-slate-500 mb-1">Ciudad</label>
+          <select data-field="estacionalidad.ciudad" class="w-full rounded-lg border-slate-200 border px-2 py-1.5 text-sm"></select>
+        </div>
+        <div>
+          <label class="block text-xs text-slate-500 mb-1">Factor incremento temp. alta</label>
+          <div class="relative">
+            <input data-field="estacionalidad.factorIncrementoTemporadaAlta" type="number" min="0" class="w-full rounded-lg border-slate-200 border pl-2 pr-6 py-1.5 text-sm" />
+            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none">%</span>
+          </div>
+        </div>
       </div>
-      <button id="btn-agregar-feriado" type="button" class="text-emerald-500 font-medium">+ Agregar fiesta local</button>
+
+      <div class="border-t border-slate-100 pt-4">
+        <h3 class="font-semibold text-sm mb-1">Feriados y Fiestas Locales</h3>
+        <p class="text-xs text-slate-500 mb-2">Las 24 provincias y sus cantones — los precios de temporada suelen variar por sector.</p>
+        <div class="overflow-x-auto">
+          <table id="tabla-feriados" class="w-full text-sm min-w-[560px]">
+            <thead>
+              <tr class="text-slate-500 text-left">
+                <th class="px-3 py-2">Nombre</th>
+                <th class="px-3 py-2">Fecha</th>
+                <th class="px-3 py-2">Tipo</th>
+                <th class="px-3 py-2"></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <button id="btn-agregar-feriado" type="button" class="text-emerald-500 font-medium mt-2">+ Agregar fiesta local</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-formulas" class="hidden print:hidden fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-4 relative min-w-0">
+      <button id="btn-cerrar-formulas" class="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-xl leading-none">×</button>
+      <div class="flex items-center gap-2 flex-wrap">
+        <h2 class="font-semibold text-lg">Ver fórmulas y valores usados</h2>
+        <span class="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-3 py-1 text-xs font-medium">✅ Validar cálculos</span>
+      </div>
+      <div id="formulas-panel" class="space-y-4 text-sm">
+        <div class="border-t border-slate-200 pt-3 first:border-0 first:pt-0">
+          <p class="text-slate-500">Costo Fijo Diario = (Σ Costos Fijos Mensuales) / 30</p>
+          <p id="formula-costo-fijo" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Costo Directo por Reserva = Lavandería + Limpieza + Amenities + Suministros + (Agua × cantidad) + Snacks</p>
+          <p id="formula-costo-directo" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Ingreso Neto Necesario = Utilidad Deseada + Costo Fijo Diario + (Costo Directo / Promedio Noches por Reserva)</p>
+          <p id="formula-ingreso-neto" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Precio Final a Publicar = Ingreso Neto Necesario / (1 − 0.155 − 0.15). Este es el precio que ve y paga el huésped.</p>
+          <p id="formula-precio-base" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Comisión Airbnb Retenida (15.5%) = Precio Final × 0.155 — esto SÍ lo descuenta Airbnb directamente de tu pago</p>
+          <p id="formula-comision" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Depósito de Airbnb ("Ganas") = Precio Final − Comisión</p>
+          <p id="formula-deposito-airbnb" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Monto IVA (15%) = Precio Final × 0.15 — esto es tu obligación tributaria aparte; Airbnb NO la retiene ni la muestra en tu pago, pero igual sale de tu bolsillo</p>
+          <p id="formula-iva" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Ingreso Neto que Recibe el Anfitrión = Depósito de Airbnb − IVA (verificación: debe coincidir con el Ingreso Neto Necesario)</p>
+          <p id="formula-precio-final" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Tarifa Feriado / Temporada Alta = Precio Final × (1 + Factor Incremento %); comisión e IVA se recalculan sobre ese nuevo precio</p>
+          <p id="formula-feriado" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Tarifa Persona Adicional = Precio Final + ((Huéspedes Reales − Capacidad Base) × Persona Adicional Recomendada), solo si Huéspedes Reales &gt; Capacidad Base</p>
+          <p id="formula-persona-adicional" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Persona Adicional Recomendada = (Precio Final / Capacidad Base) × (% recomendado / 100)</p>
+          <p id="formula-persona-recomendada" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Precio Mínimo Rentable = Precio Final recalculado con Utilidad Neta Objetivo = $0 (cubre solo costos)</p>
+          <p id="formula-precio-minimo" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Descuento Máximo Recomendado = ((Precio Final − Precio Mínimo Rentable) / Precio Final) × 100</p>
+          <p id="formula-descuento-maximo" class="font-mono text-slate-900"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Noches Mínimas Recomendadas = Costo Directo por Reserva / (Precio Final − Comisión Airbnb − IVA − Costo Fijo Diario)</p>
+          <p id="formula-noches-minimas" class="font-mono text-slate-900 whitespace-pre-line"></p>
+        </div>
+        <div class="border-t border-slate-200 pt-3">
+          <p class="text-slate-500">Margen de Contribución por Noche = Precio Final − Comisión Airbnb − IVA − (Costo Directo / Promedio Noches por Reserva)</p>
+          <p id="formula-margen-contribucion" class="font-mono text-slate-900"></p>
+          <p class="text-slate-500 mt-2">Punto de Equilibrio = Costos Fijos Mensuales / Margen de Contribución por Noche</p>
+          <p id="formula-break-even" class="font-mono text-slate-900"></p>
+        </div>
+      </div>
     </div>
   </div>
 
