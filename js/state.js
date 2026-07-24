@@ -30,6 +30,10 @@
     return n;
   }
 
+  function sanitizeInteger(value) {
+    return Math.round(sanitizeNumber(value));
+  }
+
   function mergeState(current, patch) {
     const next = { ...current };
     for (const [section, values] of Object.entries(patch)) {
@@ -42,7 +46,7 @@
     return next;
   }
 
-  const api = { createDefaultState, sanitizeNumber, mergeState };
+  const api = { createDefaultState, sanitizeNumber, sanitizeInteger, mergeState };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;

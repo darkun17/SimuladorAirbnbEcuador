@@ -17,7 +17,7 @@ window.Sim = window.Sim || {};
     sumValues,
   } = window.Sim.calculations;
   const { crearFeriadoLocal } = window.Sim.holidays;
-  const { sanitizeNumber } = window.Sim.state;
+  const { sanitizeNumber, sanitizeInteger } = window.Sim.state;
   const { renderDoughnutChart, renderBarChart } = window.Sim.charts;
   const { PROVINCIAS_ECUADOR } = window.Sim.locations;
 
@@ -109,13 +109,13 @@ window.Sim = window.Sim || {};
     };
   }
 
-  function bindNumberInput(root, path, getValue, onChange) {
+  function bindNumberInput(root, path, getValue, onChange, sanitize) {
     // data-field ids are unique document-wide — some fields live outside
     // `root` (e.g. inside a modal), so we search the whole document.
     const el = document.querySelector(`[data-field="${path}"]`);
     if (!el) return;
     el.value = getValue();
-    el.addEventListener('input', () => onChange(sanitizeNumber(el.value)));
+    el.addEventListener('input', () => onChange((sanitize || sanitizeNumber)(el.value)));
   }
 
   function renderDashboard(root, state, onStateChange) {
@@ -338,14 +338,14 @@ window.Sim = window.Sim || {};
       ['configuracion.porcentajePersonaAdicional', () => state.configuracion.porcentajePersonaAdicional, (v) => ({ configuracion: { porcentajePersonaAdicional: v } })],
       ['estacionalidad.factorIncrementoTemporadaAlta', () => state.estacionalidad.factorIncrementoTemporadaAlta, (v) => ({ estacionalidad: { factorIncrementoTemporadaAlta: v } })],
       ['simulacion.utilidadDeseadaPorNoche', () => state.simulacion.utilidadDeseadaPorNoche, (v) => ({ simulacion: { utilidadDeseadaPorNoche: v } })],
-      ['simulacion.promedioNochesPorReserva', () => state.simulacion.promedioNochesPorReserva, (v) => ({ simulacion: { promedioNochesPorReserva: v } })],
+      ['simulacion.promedioNochesPorReserva', () => state.simulacion.promedioNochesPorReserva, (v) => ({ simulacion: { promedioNochesPorReserva: v } }), sanitizeInteger],
       ['simulacion.huespedesReales', () => state.simulacion.huespedesReales, (v) => ({ simulacion: { huespedesReales: v } })],
     ];
   }
 
   function bindStepForm(root, state, onStateChange) {
     const fields = getFieldPaths(state);
-    fields.forEach(([path, getValue, toPatch]) => bindNumberInput(root, path, getValue, (v) => onStateChange(toPatch(v))));
+    fields.forEach(([path, getValue, toPatch, sanitize]) => bindNumberInput(root, path, getValue, (v) => onStateChange(toPatch(v)), sanitize));
 
     const ciudadSelect = document.querySelector('[data-field="estacionalidad.ciudad"]');
     if (ciudadSelect) {
